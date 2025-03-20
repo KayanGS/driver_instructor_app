@@ -1,3 +1,4 @@
+//filepath: //backend/models/Purchase.js
 const mongoose = require('mongoose');
 
 const purchase_schema = new mongoose.Schema({

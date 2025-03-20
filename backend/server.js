@@ -1,46 +1,40 @@
+//filepath: //backend/server.js
+
+// Load environment variables
+require('dotenv').config({ path: '../.env' });
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const path = require('path');
 
-require('dotenv').config();
 
 // Models
-const user = require('./models/User');
-const lesson = require('./models/Lesson');
-const time_slot = require('./models/TimeSlot');
-const purchase = require('./models/Purchase');
+const User = require('./models/User');
+const Lesson = require('./models/Lesson');
+const Purchase = require('./models/Purchase');
+const TimeSlot = require('./models/TimeSlot');
 
-// Initialize app
+//Used for debbuging
+//console.log('Environment Variables:', process.env);
+//MONGODB_URI = 'mongodb+srv://kayan:Ql252JIJvuYHa4rM@cluster0.xvk8r.mongodb.net/mydatabase?retryWrites=true&w=majority';
+
 const app = express();
-// Middleware
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
-app.use(methodOverride('_method'));
+app.use(bodyParser());
+app.use('/api/users', require('./routes/user_routes'));
+console.log('MongoDB URI:', process.env.MONGODB_URI);
 
-// Session setup
-app.use(session({
-    secret: 'secretKey',
-    resave: false,
-    saveUninitialized: true
-}));
-
-// Set view engine to EJS
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-// Database connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true, useUnifiedTopology: true
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
+    .then(() => console.log('🔥 MongoDB Connected'))
+    .catch(err => console.error(err));
 
-// Routes
-app.use('/', require('./routes/indexRoutes'));
-app.use('/users', require('./routes/userRoutes'));
-app.use('/lessons', require('./routes/lessonRoutes'));
+app.get('/', (req, res) => {
+    res.send('🚀 Server is running...');
+});
 
 // Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`⚡ Server running on port ${PORT}`));
