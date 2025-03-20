@@ -17,7 +17,7 @@ A web application for managing driving lessons, time slots, and purchases. Built
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/<your-username>/driver_instructor_app.git
+   git clone https://github.com/KayanGS/driver_instructor_app.git
    ```
 2. Install dependencies:
    ```bash
