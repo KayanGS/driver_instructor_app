@@ -1,3 +1,4 @@
+//filepath: //backend/models/Lesson.js
 const mongoose = require('mongoose');
 
 const lesson_schema = new mongoose.Schema({
