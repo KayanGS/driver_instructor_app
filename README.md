@@ -25,7 +25,7 @@ A web application for managing driving lessons, time slots, and purchases. Built
    npm install
 
 ## Project Structure
-📂 your-project-name/
+📂 driver_instructor_app/
 │── 📂 backend/
 │   ├── 📂 models/            # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
 │   ├── 📂 routes/            # Express routes (users, lessons, purchases)
