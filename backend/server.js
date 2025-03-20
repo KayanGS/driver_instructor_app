@@ -1,4 +1,3 @@
-
 //filepath: //backend/server.js
 
 const express = require('express');
@@ -17,8 +16,6 @@ app.use('/api/users', require('./routes/user_routes'));
 
 // Connect to MongoDB
 connectDB();
-
-console.log('MongoDB URI:', process.env.MONGODB_URI);
 
 app.get('/', (req, res) => {
     res.send('🚀 Server is running...');
