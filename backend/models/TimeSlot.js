@@ -1,3 +1,4 @@
+//filepath: //backend/models/TimeSlot.js
 const mongoose = require('mongoose');
 
 const time_slot_schema = new mongoose.Schema({

@@ -1,17 +1,9 @@
-<<<<<<< Updated upstream
-=======
+
 //filepath: backend/config/database.js
 // Load environment variables
 require('dotenv').config({ path: '../.env' });
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-const mongoose = require('mongoose');
 
+const mongoose = require('mongoose');
 
 //Used for debbuging
 //console.log('Environment Variables:', process.env);
