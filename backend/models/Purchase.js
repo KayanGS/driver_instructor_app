@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 
 const purchase_schema = new mongoose.Schema({
 
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     purchase_date: { type: Date, required: true },
     purchase_package: {
         type: String,
-        enum: ['individual', 'sixpack', '12pack'],
+        enum: ['individual', 'sixpack', 'twelvepack'],
         required: true
     },
 }, { timestamps: true });

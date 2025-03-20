@@ -13,6 +13,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use('/api/users', require('./routes/user_routes'));
+app.use('/api/lessons', require('./routes/lesson_routes'));
+app.use('/api/purchases', require('./routes/purchase_routes'));
+app.use('/api/time-slots', require('./routes/timeSlot_routes'));
 
 // Connect to MongoDB
 connectDB();
