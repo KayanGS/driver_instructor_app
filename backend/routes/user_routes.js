@@ -1,14 +1,14 @@
 //filepath: //backend/routes/user_routes.js
 const express = require('express');
 const router = express.Router();
-const user = require('../models/User');
+const User = require('../models/User');
 
 //Create a new user
 router.post('/register', async (req, res) => {
 
     try {
         const { user_name, user_email, user_password } = req.body;
-        const new_user = new user({ user_name, user_email, user_password });
+        const new_user = new User({ user_name, user_email, user_password });
         await new_user.save();
 
         res.status(200).json({
@@ -21,8 +21,12 @@ router.post('/register', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-    const users = await User.find();
-    res.json(users);
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 module.exports = router;

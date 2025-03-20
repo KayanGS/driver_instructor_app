@@ -1,4 +1,3 @@
-
 //filepath: backend/config/database.js
 // Load environment variables
 require('dotenv').config({ path: '../.env' });
