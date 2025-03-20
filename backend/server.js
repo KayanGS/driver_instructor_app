@@ -1,4 +1,5 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -15,6 +16,11 @@ const purchase = require('./models/Purchase');
 //filepath: //backend/server.js
 
 const express = require('express');
+=======
+//filepath: //backend/server.js
+
+const express = require('express');
+>>>>>>> Stashed changes
 const connectDB = require('./config/database.js');
 
 // Models
@@ -23,10 +29,14 @@ const Lesson = require('./models/Lesson');
 const Purchase = require('./models/Purchase');
 const TimeSlot = require('./models/TimeSlot');
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 // Initialize app
 const app = express();
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -51,11 +61,16 @@ mongoose.connect(process.env.MONGO_URI, {
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
 =======
+=======
+>>>>>>> Stashed changes
 app.use(express.json());
 app.use('/api/users', require('./routes/user_routes'));
 
 // Connect to MongoDB
 connectDB();
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 
 // Routes
