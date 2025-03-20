@@ -4,6 +4,9 @@
 // Load environment variables
 require('dotenv').config({ path: '../.env' });
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
