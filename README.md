@@ -30,18 +30,17 @@ A web application for managing driving lessons, time slots, and purchases. Built
 📂 driver_instructor_app/
 │── 📂 backend/
 │   ├── 📂 models/            # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
-│   ├── 📂 routes/            # Express routes (users, lessons, purchases)
-│   ├── 📂 config/            # Database connection, environment variables
+│   ├── 📂 routes/            # Express routes (users, lessons, purchases, TimeSlot)
+│   ├── 📂 config/            # Database connection
+│   ├── 📂 controllers/       # CRUD operations
 │   ├── server.js             # Main Express server
-│   ├── package.json          # Dependencies & scripts  
+├── package.json              # Dependencies & scripts    
 ├── .env                      # Environment variables
-├── node_modules/             # Installed dependencies (auto-generated)
-├── package-lock.json         # Auto-generated dependency lock file  
 ├── README.md                 # Documentation
 ```
 
 ## Work Distribution
-| Task                                      | Assigned To  |
+| Task                                      | Assigned To |
 |-------------------------------------------|-------------|
 | **Project setup & dependencies**          | Kayan       |
 | **User authentication (Login/Signup)**    | Ekaterina   |
@@ -50,7 +49,7 @@ A web application for managing driving lessons, time slots, and purchases. Built
 | **CRUD operations for Purchases**         | Kayan       |
 | **Payment system integration**            | Ekaterina   |
 | **Session & Cookie Management**           | Ekaterina   |
-| **Form validation**                        | Kayan       |
+| **Form validation**                       | Kayan       |
 | **JWT Authentication Middleware**         | Ekaterina   |
 | **Small frontend UI for testing backend** | Ekaterina   |
 | **Deployment & Documentation**            | Both        |
