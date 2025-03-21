@@ -1,29 +1,23 @@
 //filepath: //backend/server.js
 
-const express = require('express');
-const connectDB = require('./config/database.js');
+const express = require('express'); // Import express
+const connectDB = require('./config/database.js'); // Import database connection
+const userRoutes = require('./routes/user_routes'); // Import user routes 
+const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
+const purchaseRoutes = require('./routes/purchase_routes'); // Import purchase routes
+const timeSlotRoutes = require('./routes/timeSlot_routes'); // Import timeSlot routes
 
-// Models
-const User = require('./models/User');
-const Lesson = require('./models/Lesson');
-const Purchase = require('./models/Purchase');
-const TimeSlot = require('./models/TimeSlot');
+connectDB(); // Connect to database
 
-const app = express();
+const app = express(); // Initialize express
+
 // Middleware
-app.use(express.json());
-app.use('/api/users', require('./routes/user_routes'));
-app.use('/api/lessons', require('./routes/lesson_routes'));
-app.use('/api/purchases', require('./routes/purchase_routes'));
-app.use('/api/time-slots', require('./routes/timeSlot_routes'));
-
-// Connect to MongoDB
-connectDB();
-
-app.get('/', (req, res) => {
-    res.send('🚀 Server is running...');
-});
+app.use(express.json()); // Parse JSON bodies
+app.use('/api', userRoutes); // Use user routes
+app.use('/api', lessonRoutes); // Use lesson routes
+app.use('/api', purchaseRoutes); // Use purchase routes
+app.use('/api', timeSlotRoutes); // Use timeSlot routes
 
 // Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`⚡ Server running on port ${PORT}`));
+const PORT = process.env.PORT || 5000; // Set port
+app.listen(PORT, () => console.log(`⚡ Server running on port ${PORT}`)); // Start server
