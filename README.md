@@ -30,22 +30,22 @@ A web application for managing driving lessons, time slots, and purchases. Built
 📂 driver_instructor_app/
 │── 📂 backend/
 │   ├── 📂 config/                  # Database connection
-│       ├── database.js
+│   │    ├── database.js
 │   ├── 📂 controllers/             # CRUD operations
-│       ├── LessonController.js
-│       ├── TimeSlotController.js
-│       ├── UserController.js
+│   │    ├── LessonController.js
+│   │    ├── TimeSlotController.js
+│   │    ├── UserController.js
 │   ├── 📂 Middleware/              # Authentication & Authorization Middleware  
 │   ├── 📂 models/                  # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
-│       ├── Lesson.js
-│       ├── Purchase.js
-│       ├── TimeSlot.js
-│       ├── User.js
+│   │    ├── Lesson.js
+│   │    ├── Purchase.js
+│   │    ├── TimeSlot.js
+│   │    ├── User.js
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
-│       ├── lesson_routes.js
-│       ├── purchase_routes.js
-│       ├── timeSlot_routes.js
-│       ├── user_routes.js
+│   │    ├── lesson_routes.js
+│   │    ├── purchase_routes.js
+│   │    ├── timeSlot_routes.js
+│   │    ├── user_routes.js
 │   ├── server.js                   # Main Express server
 ├── package.json                    # Dependencies & scripts    
 ├── .env                            # Environment variables
