@@ -37,9 +37,8 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   ├── 📂 Middleware/              # Authentication & Authorization Middleware  
 │   ├── 📂 models/                  # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
 │   │    ├── Lesson.js
-│   │    ├── Purchase.js
 │   │    ├── User.js
-│   ├── 📂 public/                  # Temporaary frontend
+│   ├── 📂 public/                  # Temporary frontend
 │        ├── index.html
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
 │   │    ├── lesson_routes.js   
@@ -56,12 +55,11 @@ A web application for managing driving lessons, time slots, and purchases. Built
 | **Project setup & dependencies**          | Kayan       |
 | **User authentication (Login/Signup)**    | Ekaterina   |
 | **CRUD operations for Users**             | Kayan       |
-| **CRUD operations for Time Slots**        | Kayan       |
-| **CRUD operations for Purchases**         | Kayan       |
+| **CRUD operations for Lessons**           | Kayan       |
 | **Payment system integration**            | Ekaterina   |
 | **Session & Cookie Management**           | Ekaterina   |
 | **Form validation**                       | Kayan       |
 | **JWT Authentication Middleware**         | Ekaterina   |
-| **Small frontend UI for testing backend** | Ekaterina   |
+| **Small frontend UI for testing backend** | Kayan       |
 | **Deployment & Documentation**            | Both        |
 
