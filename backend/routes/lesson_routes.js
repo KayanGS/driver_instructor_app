@@ -1,4 +1,6 @@
 const express = require('express');
+const { validateLesson } = require('../validation/lessonValidation');
+
 const {
     createLesson,
     getLessonByID,
@@ -8,7 +10,7 @@ const {
 
 const router = express.Router();
 
-router.post('/lessons', createLesson);      // Users book lessons
+router.post('/lessons', ...validateLesson, createLesson); // Users book lessons
 router.get('/lessons/:id', getLessonByID);   // User fetches their lesson
 router.put('/lessons/:id', updateLessonByID);    // Users reschedule or cancel
 router.delete('/lessons/:id', deleteLessonByID); // Users delete lessons

@@ -98,5 +98,46 @@ exports.deleteUserByID = async (req, res) => {
     } catch (error) { // Catch any errors
         res.status(400).json({ error: error.message });
     }
+}
 
-} 
+/**
+ * @desc Add tokens to a user
+ * @route POST /api/users/:id/buy
+ * @access Public
+ */
+exports.buyTokens = async (req, res) => {
+    try {
+        const { package } = req.body;
+        const userId = req.params.id;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' }); // ######### RETURN ##########
+        }
+
+        let tokens = 0;
+        if (package === 'individual') tokens = 1;
+        else if (package === 'sixpack') tokens = 6;
+        else if (package === 'twelvepack') tokens = 12;
+        else {
+            return res.status(400).json({ message: 'Invalid package type' }); // ######### RETURN ##########
+        }
+
+        user.user_tokens += tokens;
+        await user.save();
+
+        res.status(200).json({
+            message: `Successfully added ${tokens} token(s)`,
+            current_tokens: user.user_tokens
+        });
+
+    } catch (error) {
+        console.error('Token purchase error:', error);
+        res.status(500).json({
+            message: 'Server error while processing token purchase',
+            error: error.message
+        });
+    }
+};
+
+
