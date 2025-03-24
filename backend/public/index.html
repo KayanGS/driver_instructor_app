@@ -12,6 +12,25 @@
             background: #f8f8f8;
         }
 
+        .hidden {
+            display: none;
+        }
+
+        nav button {
+            margin-right: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.7rem 1.5rem;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            background: #218838;
+        }
+
         form {
             margin-bottom: 2rem;
             background: white;
@@ -31,7 +50,7 @@
             width: 100%;
         }
 
-        button {
+        button[type="submit"] {
             margin-top: 1rem;
             padding: 0.7rem 1.5rem;
             background: #007BFF;
@@ -41,7 +60,7 @@
             cursor: pointer;
         }
 
-        button:hover {
+        button[type="submit"]:hover {
             background: #0056b3;
         }
 
@@ -56,54 +75,87 @@
 <body>
     <h1>📚 Lesson Booking Test UI</h1>
 
-    <form id="createUser">
-        <h2>Create User</h2>
-        <label>Name: <input type="text" name="user_name" required></label>
-        <label>Email: <input type="email" name="user_email" required></label>
-        <label>Password: <input type="password" name="user_password" required></label>
-        <button type="submit">Create</button>
-    </form>
+    <nav>
+        <button onclick="showSection('main')">🏠 Main</button>
+        <button onclick="showSection('user')">👤 Test Users</button>
+        <button onclick="showSection('lesson')">📅 Test Lessons</button>
+    </nav>
 
-    <form id="createLesson">
-        <h2>Create Lesson</h2>
-        <label>User ID: <input type="text" name="user" required></label>
-        <label>Date: <input type="date" name="lesson_date" required></label>
-        <label>Time: <input type="text" name="lesson_time" placeholder="13:00" required></label>
-        <button type="submit">Book Lesson</button>
-    </form>
+    <section id="main">
+        <p>Welcome! Use the buttons above to test User and Lesson CRUD operations.</p>
+    </section>
 
-    <form id="updateLesson">
-        <h2>Update Lesson</h2>
-        <label>Lesson ID: <input type="text" name="lesson_id" required></label>
-        <label>New Date: <input type="date" name="lesson_date"></label>
-        <label>New Time: <input type="text" name="lesson_time" placeholder="14:00"></label>
-        <label>Status:
-            <select name="lesson_status">
-                <option value="">-- Choose Status --</option>
-                <option value="scheduled">Scheduled</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-            </select>
-        </label>
-        <button type="submit">Update Lesson</button>
-    </form>
+    <section id="user" class="hidden">
+        <form id="createUser">
+            <h2>Create User</h2>
+            <label>Name: <input type="text" name="user_name" required></label>
+            <label>Email: <input type="email" name="user_email" required></label>
+            <label>Password: <input type="password" name="user_password" required></label>
+            <button type="submit">Create</button>
+        </form>
 
-    <form id="deleteLesson">
-        <h2>Delete Lesson</h2>
-        <label>Lesson ID: <input type="text" name="lesson_id" required></label>
-        <button type="submit">Delete Lesson</button>
-    </form>
+        <form id="updateUser">
+            <h2>Update User</h2>
+            <label>User ID: <input type="text" name="user_id" required></label>
+            <label>New Name: <input type="text" name="user_name"></label>
+            <label>New Email: <input type="email" name="user_email"></label>
+            <button type="submit">Update</button>
+        </form>
 
-    <form id="getLessons">
-        <h2>Get All Lessons</h2>
-        <button type="submit">Fetch</button>
-    </form>
+        <form id="deleteUser">
+            <h2>Delete User</h2>
+            <label>User ID: <input type="text" name="user_id" required></label>
+            <button type="submit">Delete</button>
+        </form>
+    </section>
+
+    <section id="lesson" class="hidden">
+        <form id="createLesson">
+            <h2>Create Lesson</h2>
+            <label>User ID: <input type="text" name="user" required></label>
+            <label>Date: <input type="date" name="lesson_date" required></label>
+            <label>Time: <input type="text" name="lesson_time" placeholder="13:00" required></label>
+            <button type="submit">Book Lesson</button>
+        </form>
+
+        <form id="updateLesson">
+            <h2>Update Lesson</h2>
+            <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+            <label>New Date: <input type="date" name="lesson_date"></label>
+            <label>New Time: <input type="text" name="lesson_time" placeholder="14:00"></label>
+            <label>Status:
+                <select name="lesson_status">
+                    <option value="">-- Choose Status --</option>
+                    <option value="scheduled">Scheduled</option>
+                    <option value="completed">Completed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </label>
+            <button type="submit">Update Lesson</button>
+        </form>
+
+        <form id="deleteLesson">
+            <h2>Delete Lesson</h2>
+            <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+            <button type="submit">Delete Lesson</button>
+        </form>
+
+        <form id="getLessons">
+            <h2>Get All Lessons</h2>
+            <button type="submit">Fetch</button>
+        </form>
+    </section>
 
     <pre id="output"></pre>
 
     <script>
         const api = 'http://localhost:5000/api';
         const output = document.getElementById('output');
+
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+        }
 
         function postForm(formId, endpoint) {
             const form = document.getElementById(formId);
@@ -162,6 +214,41 @@
             const lessonId = e.target.lesson_id.value;
             try {
                 const res = await fetch(`${api}/lessons/${lessonId}`, {
+                    method: 'DELETE'
+                });
+                const json = await res.json();
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                output.textContent = 'Error: ' + err;
+            }
+        });
+
+        document.getElementById('updateUser').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const userId = form.user_id.value;
+            const body = {
+                user_name: form.user_name.value,
+                user_email: form.user_email.value
+            };
+            try {
+                const res = await fetch(`${api}/users/${userId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const json = await res.json();
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                output.textContent = 'Error: ' + err;
+            }
+        });
+
+        document.getElementById('deleteUser').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = e.target.user_id.value;
+            try {
+                const res = await fetch(`${api}/users/${userId}`, {
                     method: 'DELETE'
                 });
                 const json = await res.json();
