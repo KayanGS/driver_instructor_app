@@ -5,8 +5,6 @@ const bcrypt = require('bcryptjs');
  * @desc Get all users
  * @route GET /api/users
  * @access Public
- * @param {*} req 
- * @param {*} res 
  */
 exports.createUser = async (req, res) => {
 
@@ -38,9 +36,6 @@ exports.createUser = async (req, res) => {
  * @desc Get user by ID
  * @route GET /api/users
  * @access Private
- * @param {*} req 
- * @param {*} res 
- * @returns  404 if user not found
  */
 exports.getUserByID = async (req, res) => {
     try {
@@ -60,9 +55,6 @@ exports.getUserByID = async (req, res) => {
  * @desc Update users by ID
  * @route PUT /api/users
  * @access Private
- * @param {*} req 
- * @param {*} res 
- * @returns 404 if user not found
  */
 exports.updateUserByID = async (req, res) => {
     try {
@@ -90,9 +82,6 @@ exports.updateUserByID = async (req, res) => {
  * @desc Delete user by ID
  * @route DELETE /api/users
  * @access Private
- * @param {*} req 
- * @param {*} res 
- * @returns 404 if user not found
  */
 exports.deleteUserByID = async (req, res) => {
     try {
