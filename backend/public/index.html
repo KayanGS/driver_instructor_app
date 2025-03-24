@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lesson Booking - Test UI</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+            background: #f8f8f8;
+        }
+
+        form {
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+        }
+
+        input,
+        select {
+            padding: 0.5rem;
+            width: 100%;
+        }
+
+        button {
+            margin-top: 1rem;
+            padding: 0.7rem 1.5rem;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        pre {
+            background: #eee;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>📚 Lesson Booking Test UI</h1>
+
+    <form id="createUser">
+        <h2>Create User</h2>
+        <label>Name: <input type="text" name="user_name" required></label>
+        <label>Email: <input type="email" name="user_email" required></label>
+        <label>Password: <input type="password" name="user_password" required></label>
+        <button type="submit">Create</button>
+    </form>
+
+    <form id="createLesson">
+        <h2>Create Lesson</h2>
+        <label>User ID: <input type="text" name="user" required></label>
+        <label>Date: <input type="date" name="lesson_date" required></label>
+        <label>Time: <input type="text" name="lesson_time" placeholder="13:00" required></label>
+        <button type="submit">Book Lesson</button>
+    </form>
+
+    <form id="updateLesson">
+        <h2>Update Lesson</h2>
+        <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+        <label>New Date: <input type="date" name="lesson_date"></label>
+        <label>New Time: <input type="text" name="lesson_time" placeholder="14:00"></label>
+        <label>Status:
+            <select name="lesson_status">
+                <option value="">-- Choose Status --</option>
+                <option value="scheduled">Scheduled</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
+        </label>
+        <button type="submit">Update Lesson</button>
+    </form>
+
+    <form id="deleteLesson">
+        <h2>Delete Lesson</h2>
+        <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+        <button type="submit">Delete Lesson</button>
+    </form>
+
+    <form id="getLessons">
+        <h2>Get All Lessons</h2>
+        <button type="submit">Fetch</button>
+    </form>
+
+    <pre id="output"></pre>
+
+    <script>
+        const api = 'http://localhost:5000/api';
+        const output = document.getElementById('output');
+
+        function postForm(formId, endpoint) {
+            const form = document.getElementById(formId);
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = Object.fromEntries(new FormData(form).entries());
+                try {
+                    const res = await fetch(`${api}/${endpoint}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const json = await res.json();
+                    output.textContent = JSON.stringify(json, null, 2);
+                } catch (err) {
+                    output.textContent = 'Error: ' + err;
+                }
+            });
+        }
+
+        document.getElementById('getLessons').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const res = await fetch(`${api}/lessons`);
+                const json = await res.json();
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                output.textContent = 'Error: ' + err;
+            }
+        });
+
+        document.getElementById('updateLesson').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const lessonId = form.lesson_id.value;
+            const body = {
+                lesson_date: form.lesson_date.value,
+                lesson_time: form.lesson_time.value,
+                lesson_status: form.lesson_status.value
+            };
+            try {
+                const res = await fetch(`${api}/lessons/${lessonId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const json = await res.json();
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                output.textContent = 'Error: ' + err;
+            }
+        });
+
+        document.getElementById('deleteLesson').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const lessonId = e.target.lesson_id.value;
+            try {
+                const res = await fetch(`${api}/lessons/${lessonId}`, {
+                    method: 'DELETE'
+                });
+                const json = await res.json();
+                output.textContent = JSON.stringify(json, null, 2);
+            } catch (err) {
+                output.textContent = 'Error: ' + err;
+            }
+        });
+
+        postForm('createUser', 'users');
+        postForm('createLesson', 'lessons');
+    </script>
+</body>
+
+</html>

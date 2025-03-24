@@ -2,7 +2,6 @@
 
 const Lesson = require('../models/Lesson'); // Importing the Lesson model
 const User = require('../models/User'); // Importing the User model
-const TimeSlot = require('../models/TimeSlot'); // Importing the TimeSlot model
 
 /**
  * @desc Create a new lesson (Booking lesson using tokens)
@@ -12,54 +11,50 @@ const TimeSlot = require('../models/TimeSlot'); // Importing the TimeSlot model
  * @param {*} res 
  * @returns 404 if user not found
  */
-exports.createLesson = async (req, res) => {
+const createLesson = async (req, res) => {
     try {
-        // Get the lesson_date and lesson_time from the request body
-        const { lesson_date, lesson_time } = req.body;
-        const user_id = req.user.id; // Get the user_id from the authenticated user
-        const user = await User.findById(user_id); // Find the user by the user_id
+        const { user, lesson_date, lesson_time } = req.body;
 
-        if (!user) { // If user not found
-            return res.status(404).json({ message: 'User not found' }); //######## RETURN ########
-        }
-
-        if (user.user_tokens <= 0) { // Check if user has enough tokens
-            return res.status(400).json({ message: 'Insufficient tokens' }); //######## RETURN ########
-        }
-
-        // Check if the time slot is available
-        const time_slot = await TimeSlot.findOneAndDelete({
-            date: lesson_date,
-            time: lesson_time
+        // Check if the date & time is already booked
+        const conflict = await Lesson.findOne({
+            lesson_date: new Date(lesson_date),
+            lesson_time: lesson_time,
+            lesson_status: 'scheduled'
         });
 
-        if (!time_slot) { // If time slot not available
-            res.status(400).json({ message: 'Time slot not available' }); //######## RETURN ########
+        if (conflict) {
+            return res.status(409).json({ message: 'That time slot is already booked.' });
         }
 
-        // Create a new lesson
-        const new_lesson = new Lesson({
-            user: user_id,
-            date: lesson_date,
-            time: lesson_time,
+        const userDoc = await User.findById(user);
+        if (!userDoc) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        if (userDoc.user_tokens <= 0) {
+            return res.status(400).json({ message: 'Not enough tokens to book a lesson.' });
+        }
+
+        // Create lesson
+        const newLesson = new Lesson({
+            user,
+            lesson_date,
+            lesson_time
         });
 
-        await new_lesson.save(); // Save the new lesson to the database
+        await newLesson.save();
 
-        user.user_tokens -= 1; // Deduct one token from the user
-        await user.save(); // Save the updated user to the database
+        // Deduct token and update user's lesson list
+        userDoc.user_tokens -= 1;
+        userDoc.lessons.push(newLesson._id);
+        await userDoc.save();
 
-        // Mark time slot as booked
-        time_slot.is_available = false; // Set is_available to false
-        time_slot.booked_by = user_id; // Set booked_by to user_id
-        await time_slot.save(); // Save the updated time slot to the database
-
-        res.status(201).json({ message: 'Lesson booked successfully' }); //######## RETURN ########
-
+        res.status(201).json(newLesson);
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message }); //######## RETURN ########
+        res.status(500).json({ message: 'Server error', error: error.message });
     }
-}
+};
+
 
 /**
  * @desc Get lesson by ID
