@@ -40,9 +40,14 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   │    ├── User.js
 │   ├── 📂 public/                  # Temporary frontend
 │        ├── index.html
+│        ├── script.js
+│        ├── style.css
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
 │   │    ├── lesson_routes.js   
 │   │    ├── user_routes.js
+│   ├── 📂 validation/              # Server-side validation
+│   │    ├── lessonValidation.js
+│   │    ├── userValidation.js
 │   ├── server.js                   # Main Express server
 ├── package.json                    # Dependencies & scripts    
 ├── .env                            # Environment variables
