@@ -11,50 +11,51 @@ const User = require('../models/User'); // Importing the User model
  * @param {*} res 
  * @returns 404 if user not found
  */
-const createLesson = async (req, res) => {
+exports.createLesson = async (req, res) => {
     try {
         const { user, lesson_date, lesson_time } = req.body;
 
-        // Check if the date & time is already booked
-        const conflict = await Lesson.findOne({
+        // Check for conflicting lesson (same date + time + status = scheduled)
+        const existing = await Lesson.findOne({
             lesson_date: new Date(lesson_date),
-            lesson_time: lesson_time,
+            lesson_time,
             lesson_status: 'scheduled'
         });
 
-        if (conflict) {
-            return res.status(409).json({ message: 'That time slot is already booked.' });
+        if (existing) {
+            return res.status(409).json({ message: 'That time slot is already booked' }); // ######## RETURN ########
         }
 
+        // Find the user
         const userDoc = await User.findById(user);
         if (!userDoc) {
-            return res.status(404).json({ message: 'User not found.' });
+            return res.status(404).json({ message: 'User not found' }); // ######## RETURN ########
         }
 
+        // Check token balance
         if (userDoc.user_tokens <= 0) {
-            return res.status(400).json({ message: 'Not enough tokens to book a lesson.' });
+            return res.status(400).json({ message: 'Not enough tokens to book a lesson' }); // ######## RETURN ########
         }
 
-        // Create lesson
-        const newLesson = new Lesson({
+        // Create the lesson
+        const lesson = new Lesson({
             user,
             lesson_date,
             lesson_time
         });
 
-        await newLesson.save();
+        await lesson.save();
 
-        // Deduct token and update user's lesson list
+        // Update user
         userDoc.user_tokens -= 1;
-        userDoc.lessons.push(newLesson._id);
+        userDoc.lessons.push(lesson._id);
         await userDoc.save();
 
-        res.status(201).json(newLesson);
+        res.status(201).json(lesson);
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
-
 
 /**
  * @desc Get lesson by ID
