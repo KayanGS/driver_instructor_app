@@ -1,3 +1,4 @@
+/* Body */
 body {
     font-family: sans-serif;
     margin: 2rem;
@@ -5,9 +6,11 @@ body {
 }
 
 .hidden {
+    /* Hide element */
     display: none;
 }
 
+/* Navbar */
 nav button {
     margin-right: 1rem;
     margin-bottom: 1rem;
@@ -19,10 +22,12 @@ nav button {
     cursor: pointer;
 }
 
+/* Navbar button hover */
 nav button:hover {
     background: #218838;
 }
 
+/* Navbar button active */
 form {
     margin-bottom: 2rem;
     background: white;
@@ -31,23 +36,27 @@ form {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Form */
 label {
     display: block;
     margin-top: 1rem;
 }
 
+/* Form input */
 input,
 select {
     padding: 0.5rem;
     width: 100%;
 }
 
+/* Form input focus */
 .error {
     color: red;
     font-size: 0.9rem;
     margin-top: 0.25rem;
 }
 
+/* Form button */
 button[type="submit"] {
     margin-top: 1rem;
     padding: 0.7rem 1.5rem;
@@ -58,10 +67,12 @@ button[type="submit"] {
     cursor: pointer;
 }
 
+/* Form button hover */
 button[type="submit"]:hover {
     background: #0056b3;
 }
 
+/* Table */
 pre {
     background: #eee;
     padding: 1rem;
