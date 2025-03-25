@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lesson Booking - Test UI</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> <!-- filepath: backend/public/style.css -->
 </head>
 
 <body>
@@ -33,22 +33,29 @@
     <section id="user" class="hidden">
         <form id="createUser">
             <h2>Create User</h2>
-            <label>Name: <input type="text" name="user_name" required oninput="
-                    this.value = this.value.replace(/[^a-zA-Z ]/g, '')">
+            <label>Name: <input type="text" name="user_name" required>
+                <!-- for future use
+                oninput=" this.value = this.value.replace(/[^a-zA-Z ]/g, '')
+                -->
             </label>
+            <!-- for future use 
             <div id="error_user_name" class="error"></div>
+            -->
 
             <label>
                 Email: <input type="email" name="user_email" required>
             </label>
-
+            <!-- for future use     
             <div id="error_user_email" class="error"></div>
+            -->
 
             <label>
                 Password: <input type="password" name="user_password" required>
             </label>
-
+            <!-- for future use 
             <div id="error_user_password" class="error"></div>
+            -->
+
             <button type="submit">Create</button>
         </form>
         <!-- End of Create User -->
@@ -58,9 +65,14 @@
             <h2>Update User</h2>
             <label>User ID: <input type="text" name="user_id" required></label>
             <label>New Name: <input type="text" name="user_name"></label>
-            <div id="error_user_name" class="error"></div>
+            <!-- Future use <div id="error_user_name" class="error"></div>-->
             <label>New Email: <input type="email" name="user_email"></label>
-            <div id="error_user_email" class="error"></div>
+            <!-- Future use <<div id="error_user_email" class="error"></div>-->
+
+            <label>
+                New Password: <input type="password" name="user_password">
+            </label>
+
             <button type="submit">Update</button>
         </form>
         <!-- End of Update User -->
@@ -70,6 +82,11 @@
             <h2>Delete User</h2>
             <label>User ID: <input type="text" name="user_id" required></label>
             <button type="submit">Delete</button>
+        </form>
+        <!-- Get All Users -->
+        <form id="getAllUsers">
+            <h2>Get All Users</h2>
+            <button type="submit">Fetch All Users</button>
         </form>
         <!-- End of Delete User -->
     </section>
@@ -82,11 +99,26 @@
         <form id="createLesson">
             <h2>Create Lesson</h2>
             <label>User ID: <input type="text" name="user" required></label>
-            <label>Date: <input type="date" name="lesson_date" required></label>
+
+            <label>
+                Date:
+                <input type="date" name="lesson_date" required>
+            </label>
 
             <label>
                 Time:
-                <input type="text" name="lesson_time" placeholder="13:00" required>
+                <select name="lesson_time" required>
+                    <option value="">-- Select Time --</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                </select>
             </label>
 
             <button type="submit">Book Lesson</button>
@@ -104,7 +136,19 @@
             <label>New Date: <input type="date" name="lesson_date"></label>
 
             <label>
-                New Time: <input type="text" name="lesson_time" placeholder="14:00">
+                Time:
+                <select name="lesson_time" required>
+                    <option value="">-- Select Time --</option>
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                </select>
             </label>
 
             <label>Status:
@@ -132,7 +176,7 @@
         <!-- End of Delete Lesson -->
 
         <!-- Get All Lessons -->
-        <form id="getLessons">
+        <form id="getAllLessons">
             <h2>Get All Lessons</h2>
             <button type="submit">Fetch</button>
         </form>

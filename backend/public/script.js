@@ -15,39 +15,40 @@ function showSection(id) {
 /**
  * @param {*} data
  * Validate user form data
+ * For future use
  */
-function validateUserForm(data) {
+// function validateUserForm(data) {
 
-    let errors = {}; // Errors object
+//     let errors = {}; // Errors object
 
-    // Check if user_name is empty and only contains letters  
-    if (!/^[A-Za-z ]+$/.test(data.user_name)) {
-        errors.user_name = 'Name must only contain letters';
-    }
-    // Check if user_email is empty and has a valid email format
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.user_email)) {
-        errors.user_email = 'Invalid email format';
-    }
+//     // Check if user_name is empty and only contains letters  
+//     if (!/^[A-Za-z ]+$/.test(data.user_name)) {
+//         errors.user_name = 'Name must only contain letters';
+//     }
+//     // Check if user_email is empty and has a valid email format
+//     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.user_email)) {
+//         errors.user_email = 'Invalid email format';
+//     }
 
-    let pwdErrors = []; // Password errors array
+//     let pwdErrors = []; // Password errors array
 
-    // Check if user_password contais letters
-    if (!/[a-zA-Z]/.test(data.user_password)) pwdErrors.push("letters");
-    // Check if user_password contains numbers
-    if (!/[0-9]/.test(data.user_password)) pwdErrors.push("numbers");
-    //Check if user_password contains special characters
-    if (!/[!@#$%^&*]/.test(data.user_password)) {
-        pwdErrors.push("special characters (!@#$%^&*)");
-    }
-    // Check if user_password has a minimum length of 6 characters
-    if (data.user_password.length < 6) pwdErrors.push("minimum 6 characters");
-    // Check if user_password is empty and print the errors
-    if (pwdErrors.length > 0) {
-        errors.user_password = `Password must include: ${pwdErrors.join(', ')}`;
-    }
+//     // Check if user_password contais letters
+//     if (!/[a-zA-Z]/.test(data.user_password)) pwdErrors.push("letters");
+//     // Check if user_password contains numbers
+//     if (!/[0-9]/.test(data.user_password)) pwdErrors.push("numbers");
+//     //Check if user_password contains special characters
+//     if (!/[!@#$%^&*]/.test(data.user_password)) {
+//         pwdErrors.push("special characters (!@#$%^&*)");
+//     }
+//     // Check if user_password has a minimum length of 6 characters
+//     if (data.user_password.length < 6) pwdErrors.push("minimum 6 characters");
+//     // Check if user_password is empty and print the errors
+//     if (pwdErrors.length > 0) {
+//         errors.user_password = `Password must include: ${pwdErrors.join(', ')}`;
+//     }
 
-    return errors; // ################# RETURN ###################
-}
+//     return errors; // ################# RETURN ###################
+// }
 
 
 document.getElementById('createUser').addEventListener('submit', async (e) => {
@@ -55,20 +56,22 @@ document.getElementById('createUser').addEventListener('submit', async (e) => {
     e.preventDefault(); // Prevent the form from submitting
     const form = e.target; // Get the form
     const data = Object.fromEntries(new FormData(form).entries()); // Get form data
-    const errors = validateUserForm(data); // Validate form data
+
+    // For future use: const errors = validateUserForm(data); // Validate form data
 
     // Clear previous errors
     document.querySelectorAll('.error').forEach(el => el.textContent = '');
 
     // If there are errors, display them and return
-    if (Object.keys(errors).length > 0) {
-        // For each error, display it in the corresponding div
-        for (const key in errors) {
-            const errorDiv = document.getElementById(`error_${key}`);
-            if (errorDiv) errorDiv.textContent = errors[key];
-        }
-        return; // ################# RETURN ###################
-    }
+    // For future use:
+    // if (Object.keys(errors).length > 0) {
+    //     // For each error, display it in the corresponding div
+    //     for (const key in errors) {
+    //         const errorDiv = document.getElementById(`error_${key}`);
+    //         if (errorDiv) errorDiv.textContent = errors[key];
+    //     }
+    //     return; // ################# RETURN ###################
+    // }
 
     // If there are no errors, send the data to the server
     try {
@@ -95,7 +98,8 @@ document.getElementById('updateUser').addEventListener('submit', async (e) => {
 
     const body = { // Create the request body
         user_name: form.user_name.value,
-        user_email: form.user_email.value
+        user_email: form.user_email.value,
+        user_password: form.user_password.value
     };
 
     try { // Send a PUT request to the server
@@ -132,6 +136,19 @@ document.getElementById('deleteUser').addEventListener('submit', async (e) => {
     }
 });
 
+document.getElementById('getAllUsers').addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent the form from submitting
+
+    try { // Send a GET request to the server
+        const res = await fetch(`${api}/users`); // Fetch all users
+        const json = await res.json(); // Parse the JSON response
+        output.textContent = JSON.stringify(json, null, 2); // Display the response
+
+    } catch (err) { // If there is an error, display it
+        output.textContent = 'Error: ' + err;
+    }
+});
+
 document.getElementById('createLesson')
     .addEventListener('submit', async (e) => {
 
@@ -156,7 +173,7 @@ document.getElementById('createLesson')
         }
     });
 
-document.getElementById('getLessons').addEventListener('submit', async (e) => {
+document.getElementById('getAllLessons').addEventListener('submit', async (e) => {
 
     e.preventDefault(); // Prevent the form from submitting
 
