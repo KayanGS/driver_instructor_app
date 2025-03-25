@@ -79,6 +79,28 @@ exports.getLessonByID = async (req, res) => {
 }
 
 /**
+ * @desc Get all lessons
+ * @route GET /api/lessons
+ * @access Private (Only authenticated users can get all lessons)
+ */
+exports.getAllLessons = async (req, res) => {
+    try {
+        const lessons = await Lesson.find()
+            .populate({ path: 'user', select: 'user_name user_email' })
+            .select('lesson_date lesson_time lesson_status user')
+            .sort({ lesson_date: 1, lesson_time: 1 });
+
+        res.status(200).json(lessons);
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server error while fetching lessons',
+            error: error.message
+        });
+    }
+}
+
+
+/**
  * @desc Update lesson by ID (Reschedule lesson)
  * @route PUT /api/lessons/:id
  * @access Private (Only authenticated users can update a lesson)

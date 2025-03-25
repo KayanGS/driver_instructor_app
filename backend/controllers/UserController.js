@@ -33,6 +33,29 @@ exports.createUser = async (req, res) => {
 };
 
 /**
+ * @desc Get all users
+ * @route GET /api/users
+ * @access Private  
+ */
+exports.getAllUsers = async (req, res) => {
+    try {
+        // Find all users
+        const users = await User.find()
+            .populate('lessons', 'lesson_date lesson_time lesson_status')
+            .select('-user_password');
+
+        // Send users to the client
+        res.status(200).json(users);
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server error while fetching users',
+            error: error.message
+        });
+    }
+}
+
+/**
  * @desc Get user by ID
  * @route GET /api/users
  * @access Private
