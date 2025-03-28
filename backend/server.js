@@ -9,6 +9,9 @@ connectDB(); // Connect to database
 
 //Middleware
 const app = express(); // Initialize express
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.json()); // Parse JSON bodies
 
 const userRoutes = require('./routes/user_routes'); // Import user routes 
@@ -19,8 +22,21 @@ app.use(express.json()); // Parse JSON bodies
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
 
+app.get('/', (req, res) => {
+    res.render('index');
+});
+app.get('/users', (req, res) => {
+    res.render('users');
+});
+
+app.get('/lessons', (req, res) => {
+    res.render('lessons');
+});
+
+
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // Start server

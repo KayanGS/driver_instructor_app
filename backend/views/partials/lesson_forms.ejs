@@ -1,0 +1,70 @@
+<!-- filepath: backend/views/partials/lesson_forms.ejs -->
+
+<!-- ############################ CREATE LESSON ############################ -->
+<form id="createLesson">
+    <h2>Create Lesson</h2>
+    <label>User ID: <input type="text" name="user" required></label>
+    <label>Date: <input type="date" name="lesson_date" required></label>
+    <label>Time:
+        <select name="lesson_time" required>
+            <option value="">-- Select Time --</option>
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+        </select>
+    </label>
+    <button type="submit">Book Lesson</button>
+</form>
+<!-- ######################## END OF CREATE LESSON ######################## -->
+
+<!-- ############################ UPDATE LESSON ############################ -->
+<form id="updateLesson">
+    <h2>Update Lesson</h2>
+    <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+    <label>New Date: <input type="date" name="lesson_date"></label>
+    <label>Time:
+        <select name="lesson_time" required>
+            <option value="">-- Select Time --</option>
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+            <option value="13:00">13:00</option>
+            <option value="14:00">14:00</option>
+            <option value="15:00">15:00</option>
+            <option value="16:00">16:00</option>
+            <option value="17:00">17:00</option>
+            <option value="18:00">18:00</option>
+        </select>
+    </label>
+    <label>Status:
+        <select name="lesson_status">
+            <option value="">-- Choose Status --</option>
+            <option value="scheduled">Scheduled</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </label>
+    <button type="submit">Update Lesson</button>
+</form>
+<!-- ######################## END OF UPDATE LESSON ######################## -->
+
+<!-- ############################ DELETE LESSON ############################ -->
+<form id="deleteLesson">
+    <h2>Delete Lesson</h2>
+    <label>Lesson ID: <input type="text" name="lesson_id" required></label>
+    <button type="submit">Delete Lesson</button>
+</form>
+<!-- ######################## END OF DELETE LESSON ######################## -->
+
+<!-- ####################### GET LESSON All LESSONS ####################### -->
+<form id="getAllLessons">
+    <h2>Get All Lessons</h2>
+    <button type="submit">Fetch</button>
+</form>
+<!-- ####################### END OF GET ALL LESSONS ####################### -->

@@ -1,0 +1,27 @@
+<!-- filepath: backend/views/index.ejs -->
+
+<%- include('partials/header') %> <!-- Include the header partial filepath: backend/views/partials/header.js -->
+
+    <h1>📚 Lesson Booking Test UI</h1>
+
+    <%- include('partials/nav') %> <!-- Include the nav partial -->
+
+        <section id="main">
+            <p>Welcome! Use the buttons above to test User and Lesson CRUD operations.</p>
+        </section>
+
+        <section id="user" class="hidden">
+            <%- include('partials/user_forms') %>
+        </section>
+
+        <section id="lesson" class="hidden">
+            <%- include('partials/lesson_forms') %>
+        </section>
+
+        <section id="purchase" class="hidden">
+            <%- include('partials/purchase_form') %>
+        </section>
+
+        <pre id="output"></pre>
+
+        <%- include('partials/footer') %>
