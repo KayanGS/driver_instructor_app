@@ -39,7 +39,6 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   │    ├── Lesson.js
 │   │    ├── User.js
 │   ├── 📂 public/                  # Temporary frontend
-│        ├── index.html
 │        ├── script.js
 │        ├── style.css
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
@@ -48,6 +47,15 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   ├── 📂 validation/              # Server-side validation
 │   │    ├── lessonValidation.js
 │   │    ├── userValidation.js
+│   ├── 📂 validation/              # Temporary EJS frontend
+│   │    ├── 📂 validation/
+│   │    │    ├── footer.ejs
+│   │    │    ├── header.ejs
+│   │    │    ├── lesson_forms.ejs
+│   │    │    ├── nav.ejs
+│   │    │    ├── purchase_form.ejs
+│   │    │    ├── user_forms.ejs             
+│   │    ├── index.ejs
 │   ├── server.js                   # Main Express server
 ├── package.json                    # Dependencies & scripts    
 ├── .env                            # Environment variables
