@@ -42,7 +42,7 @@ exports.getAllUsers = async (req, res) => {
         // Find all users
         const users = await User.find()
             .populate('lessons', 'lesson_date lesson_time lesson_status')
-            .select('-user_password');
+            .select('user_name user_email');
 
         // Send users to the client
         res.status(200).json(users);
@@ -116,7 +116,7 @@ exports.deleteUserByID = async (req, res) => {
             });
         }
         // Send a response to the client
-        res.json({ message: 'User delted successfully', deleted_user });
+        res.json({ message: 'User deleted successfully', deleted_user });
 
     } catch (error) { // Catch any errors
         res.status(400).json({ error: error.message });
@@ -130,31 +130,33 @@ exports.deleteUserByID = async (req, res) => {
  */
 exports.buyTokens = async (req, res) => {
     try {
-        const { package } = req.body;
-        const userId = req.params.id;
+        const { package } = req.body; // Get package type from request body
+        const userId = req.params.id; // Get user ID from request params
 
-        const user = await User.findById(userId);
-        if (!user) {
+        const user = await User.findById(userId); // Find user by ID
+
+        if (!user) { // If user not found
             return res.status(404).json({ message: 'User not found' }); // ######### RETURN ##########
         }
 
-        let tokens = 0;
-        if (package === 'individual') tokens = 1;
-        else if (package === 'sixpack') tokens = 6;
-        else if (package === 'twelvepack') tokens = 12;
-        else {
+        let tokens = 0; // Initialize tokens to 0
+        if (package === 'individual') tokens = 1; // Set 1 token for individual package
+        else if (package === 'sixpack') tokens = 6; // Set 6 tokens for sixpack package
+        else if (package === 'twelvepack') tokens = 12; // Set 12 tokens for twelvepack package
+
+        else { // If invalid package type
             return res.status(400).json({ message: 'Invalid package type' }); // ######### RETURN ##########
         }
 
-        user.user_tokens += tokens;
-        await user.save();
+        user.user_tokens += tokens; // Add tokens to user
+        await user.save(); // Save user to the database
 
-        res.status(200).json({
+        res.status(200).json({// Send a response to the client
             message: `Successfully added ${tokens} token(s)`,
             current_tokens: user.user_tokens
         });
 
-    } catch (error) {
+    } catch (error) { // Catch any errors
         console.error('Token purchase error:', error);
         res.status(500).json({
             message: 'Server error while processing token purchase',

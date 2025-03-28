@@ -1,0 +1,71 @@
+<!-- filepath: backend/views/partials/user_forms.ejs -->
+
+<!-- ############################ CREATE USER ############################ -->
+<form id="createUser">
+    <h2>Create User</h2>
+    <label>
+        Name:
+        <input type="text" name="user_name" required oninput="this.value = this.value.replace(/[^a-zA-Z ]/g, '')">
+        <div id="error_user_name" class="error"></div>
+    </label>
+
+    <label>
+        Email:
+        <input type="email" name="user_email" required>
+        <div id="error_user_email" class="error"></div>
+    </label>
+
+    <label>
+        Password:
+        <input type="password" name="user_password" required>
+        <div id="error_user_password" class="error"></div>
+    </label>
+
+    <button type="submit">Create</button>
+</form>
+<!-- ######################## END OF CREATE USER ######################## -->
+
+<!-- ############################ UPDATE USER ############################ -->
+<form id="updateUser">
+    <h2>Update User</h2>
+    <label>
+        User ID:
+        <input type="text" name="user_id" required>
+    </label>
+
+    <label>
+        New Name:
+        <input type="text" name="user_name">
+        <div id="error_user_name" class="error"></div>
+    </label>
+
+    <label>
+        New Email:
+        <input type="email" name="user_email">
+        <div id="error_user_email" class="error"></div>
+    </label>
+
+    <label>
+        New Password:
+        <input type="password" name="user_password">
+        <div id="error_user_password" class="error"></div>
+    </label>
+
+    <button type="submit">Update</button>
+</form>
+<!-- ######################## END OF UPDATE USER ######################## -->
+
+<!-- ############################ DELETE USER ############################ -->
+<form id="deleteUser">
+    <h2>Delete User</h2>
+    <label>User ID: <input type="text" name="user_id" required></label>
+    <button type="submit">Delete</button>
+</form>
+<!-- ######################## END OF DELETE USER ######################## -->
+
+<!-- ############################ GET ALL USERS ############################ -->
+<form id="getAllUsers">
+    <h2>Get All Users</h2>
+    <button type="submit">Fetch All Users</button>
+</form>
+<!-- ######################## END OF GET ALL USERS ######################## -->
