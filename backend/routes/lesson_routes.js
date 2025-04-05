@@ -1,5 +1,6 @@
 const express = require('express');
 const { validateLesson } = require('../validation/lessonValidation');
+const { isAuthenticated } = require('../middleware/authMiddleware');
 
 const {
     createLesson,
@@ -11,10 +12,11 @@ const {
 
 const router = express.Router();
 
-router.post('/lessons', ...validateLesson, createLesson); // Users book lessons
-router.get('/lessons', getAllLessons); // Get all lessons
-router.get('/lessons/:id', getLessonByID);   // User fetches their lesson
-router.put('/lessons/:id', ...validateLesson, updateLessonByID); // Users reschedule 
-router.delete('/lessons/:id', deleteLessonByID); // Users delete lessons
+// Secure these routes with isAuthenticated
+router.post('/lessons', isAuthenticated, ...validateLesson, createLesson);
+router.get('/lessons', isAuthenticated, getAllLessons);
+router.get('/lessons/:id', isAuthenticated, getLessonByID);
+router.put('/lessons/:id', isAuthenticated, ...validateLesson, updateLessonByID);
+router.delete('/lessons/:id', isAuthenticated, deleteLessonByID);
 
 module.exports = router;

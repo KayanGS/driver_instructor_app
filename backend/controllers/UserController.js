@@ -32,6 +32,55 @@ exports.createUser = async (req, res) => {
     }
 };
 
+exports.loginUser = async (req, res) => {
+    const { user_email, user_password } = req.body;
+    try {
+        const user = await User.findOne({ user_email });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        const isMatch = await bcrypt.compare(user_password, user.user_password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Safeguard: Check if req.session is available
+        if (!req.session) {
+            return res.status(500).json({ message: 'Session middleware not working properly.' });
+        }
+
+        req.session.userId = user._id;
+        res.status(200).json({ message: 'Login successful', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Login failed', error: error.message });
+    }
+};
+
+
+/**
+ * @desc Logout user
+ * @route POST /api/logout
+ * @access Private
+ */
+exports.logoutUser = (req, res) => {
+    if (req.session) {
+        req.session.destroy(err => {
+            if (err) {
+                console.error('Logout error:', err);
+                return res.status(500).json({ message: 'Logout failed', error: err.message });
+            } else {
+                res.clearCookie('connect.sid'); // Default session cookie name
+                return res.status(200).json({ message: 'Logged out successfully' });
+            }
+        });
+    } else {
+        return res.status(400).json({ message: 'No session to log out from' });
+    }
+};
+
+
+
 /**
  * @desc Get all users
  * @route GET /api/users

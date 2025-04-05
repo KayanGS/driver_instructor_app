@@ -85,9 +85,8 @@ exports.getLessonByID = async (req, res) => {
  */
 exports.getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find()
-            .populate({ path: 'user', select: 'user_name user_email' })
-            .select('lesson_date lesson_time lesson_status user')
+        const lessons = await Lesson.find({ user: req.session.userId }) // ✨ Only fetch user's lessons
+            .select('lesson_date lesson_time lesson_status') // cleaner output
             .sort({ lesson_date: 1, lesson_time: 1 });
 
         res.status(200).json(lessons);
@@ -107,31 +106,38 @@ exports.getAllLessons = async (req, res) => {
  */
 exports.updateLessonByID = async (req, res) => {
     try {
-        const { lesson_date, lesson_time } = req.body;
         const lesson = await Lesson.findById(req.params.id);
 
         if (!lesson) {
-            return res.status(404).json({ message: 'Lesson not found' }); //######## RETURN ########
+            return res.status(404).json({ message: 'Lesson not found' });
         }
 
-        // Check for conflict if date and time are being changed
+        // 🔒 Check ownership
+        if (lesson.user.toString() !== req.session.userId) {
+            return res.status(403).json({ message: 'Not authorized to update this lesson' });
+        }
+
+        const { lesson_date, lesson_time, lesson_status } = req.body;
+
         if (lesson_date && lesson_time) {
             const conflict = await Lesson.findOne({
                 lesson_date: new Date(lesson_date),
                 lesson_time,
                 lesson_status: 'scheduled',
-                _id: { $ne: lesson._id } // exclude current lesson
+                _id: { $ne: lesson._id }
             });
 
             if (conflict) {
                 return res.status(400).json({
                     message: 'That time slot is already booked'
-                }); //######## RETURN ########
+                });
             }
 
             lesson.lesson_date = lesson_date;
             lesson.lesson_time = lesson_time;
         }
+
+        if (lesson_status) lesson.lesson_status = lesson_status;
 
         await lesson.save();
         res.status(200).json({

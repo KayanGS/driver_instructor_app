@@ -2,6 +2,8 @@
 
 const express = require('express'); // Import express
 const connectDB = require('./config/database.js'); // Import database connection
+const sessionMiddleware = require('./config/session');
+
 
 const path = require('path');
 
@@ -11,14 +13,14 @@ connectDB(); // Connect to database
 const app = express(); // Initialize express
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
+app.use(sessionMiddleware);
 app.use(express.json()); // Parse JSON bodies
 
 const userRoutes = require('./routes/user_routes'); // Import user routes 
 const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
 
 // Middleware
-app.use(express.json()); // Parse JSON bodies
+
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
 

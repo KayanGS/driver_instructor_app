@@ -1,121 +1,205 @@
-//filepath: /backend/public/script.js
 const api = 'http://localhost:5000/api'; // API URL
-const output = document.getElementById('output'); // Output element
+const output = document.getElementById('output');
+let isAuthenticated = !!localStorage.getItem('userId');
 
-/**
- * @param {*} id 
- * Show the section with the given id and hide all other sections
- */
 function showSection(id) {
-    document.querySelectorAll('section')  // Get all sections
-        .forEach(s => s.classList.add('hidden')); // Hide all sections
-
-    document.getElementById(id).classList.remove('hidden'); // Show the section with the given id
+    document.querySelectorAll('section').forEach(section => {
+        section.classList.add('hidden');
+    });
+    const target = document.getElementById(id);
+    if (target) {
+        target.classList.remove('hidden');
+    } else {
+        console.warn(`❗ Section "${id}" not found`);
+    }
 }
 
-/**
- * @param {*} data
- * Validate user form data
- */
+function showAuthenticatedUI(isLoggedIn) {
+    const authOnlySections = ['lesson', 'purchase', 'user'];
+    const authOnlyButtons = ['nav-lesson', 'nav-purchase', 'nav-user', 'nav-logout'];
+    const guestOnlyButtons = ['nav-login'];
+
+    authOnlySections.forEach(id => {
+        const section = document.getElementById(id);
+        if (section) section.classList.toggle('hidden', !isLoggedIn);
+    });
+
+    authOnlyButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', !isLoggedIn);
+    });
+
+    guestOnlyButtons.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle('hidden', isLoggedIn);
+    });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    showAuthenticatedUI(isAuthenticated);
+});
+
+const loginForm = document.getElementById('loginForm');
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const data = Object.fromEntries(new FormData(loginForm).entries());
+
+        try {
+            const res = await fetch(`${api}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            });
+
+            const rawText = await res.text();
+            console.log('🔍 Raw response:', rawText);
+
+            let json;
+            try {
+                json = JSON.parse(rawText);
+            } catch (parseErr) {
+                console.error('❌ Failed to parse JSON:', parseErr);
+                output.textContent = 'Login error: Server did not return valid JSON.';
+                return;
+            }
+
+            if (res.ok && json.user && json.user._id) {
+                localStorage.setItem('userId', json.user._id);
+                isAuthenticated = true;
+                showAuthenticatedUI(true);
+                showSection('main');
+                output.textContent = 'Login successful!';
+            } else {
+                output.textContent = json.message || 'Login failed';
+            }
+        } catch (err) {
+            output.textContent = 'Login error: ' + err.message;
+        }
+    });
+}
+
+async function logout() {
+    try {
+        const res = await fetch(`${api}/logout`, {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        const json = await res.json();
+        if (res.ok) {
+            localStorage.removeItem('userId');
+            isAuthenticated = false;
+            showAuthenticatedUI(false);
+            showSection('home');
+            output.textContent = 'You have been logged out.';
+        } else {
+            output.textContent = json.message || 'Logout failed.';
+        }
+    } catch (err) {
+        output.textContent = 'Logout error: ' + err.message;
+    }
+}
+
 function validateUserForm(data) {
+    let errors = {};
 
-    let errors = {}; // Errors object
-
-    // Check if user_name is empty and only contains letters  
     if (!/^[A-Za-z ]+$/.test(data.user_name)) {
         errors.user_name = 'Name must only contain letters';
     }
-    // Check if user_email is empty and has a valid email format
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.user_email)) {
         errors.user_email = 'Invalid email format';
     }
 
-    let pwdErrors = []; // Password errors array
-
-    // Check if user_password contais letters
+    let pwdErrors = [];
     if (!/[a-zA-Z]/.test(data.user_password)) pwdErrors.push("letters");
-    // Check if user_password contains numbers
     if (!/[0-9]/.test(data.user_password)) pwdErrors.push("numbers");
-    //Check if user_password contains special characters
-    if (!/[!@#$%^&*]/.test(data.user_password)) {
-        pwdErrors.push("special characters (!@#$%^&*)");
-    }
-    // Check if user_password has a minimum length of 6 characters
+    if (!/[!@#$%^&*]/.test(data.user_password)) pwdErrors.push("special characters (!@#$%^&*)");
     if (data.user_password.length < 6) pwdErrors.push("minimum 6 characters");
-    // Check if user_password is empty and print the errors
+
     if (pwdErrors.length > 0) {
         errors.user_password = `Password must include: ${pwdErrors.join(', ')}`;
     }
 
-    return errors; // ################# RETURN ###################
+    return errors;
 }
 
+// document.getElementById('createLesson')?.addEventListener('submit', async (e) => {
+//     e.preventDefault();
+//     const form = e.target;
+//     const data = Object.fromEntries(new FormData(form).entries());
+//     data.user = localStorage.getItem('userId');
 
-document.getElementById('createUser').addEventListener('submit', async (e) => {
+//     try {
+//         const res = await fetch(`${api}/lessons`, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify(data)
+//         });
+//         const json = await res.json();
+//         output.textContent = JSON.stringify(json, null, 2);
+//     } catch (err) {
+//         output.textContent = 'Error: ' + err;
+//     }
+// });
 
-    e.preventDefault(); // Prevent the form from submitting
-    const form = e.target; // Get the form
-    const data = Object.fromEntries(new FormData(form).entries()); // Get form data
+document.getElementById('buyTokens')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const userId = localStorage.getItem('userId');
+    const packageType = form.package.value;
 
-    const errors = validateUserForm(data); // Validate form data
-
-    // Clear previous errors
-    document.querySelectorAll('.error').forEach(el => el.textContent = '');
-
-    // If there are errors, display them and return
-    if (Object.keys(errors).length > 0) {
-        // For each error, display it in the corresponding div
-        for (const key in errors) {
-            const errorDiv = document.getElementById(`error_${key}`);
-            if (errorDiv) errorDiv.textContent = errors[key];
-        }
-        return; // ################# RETURN ###################
+    if (!userId || !packageType) {
+        output.textContent = 'Please fill out all fields to buy tokens.';
+        return;
     }
 
-    // If there are no errors, send the data to the server
     try {
-        // Send a POST request to the server
-        const res = await fetch(`${api}/users`, {
+        const res = await fetch(`${api}/users/${userId}/buy`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
+            body: JSON.stringify({ package: packageType })
         });
 
-        const json = await res.json(); // Parse the JSON response
-        output.textContent = JSON.stringify(json, null, 2); // Display the response
-
-    } catch (err) { // If there is an error, display it
+        const json = await res.json();
+        output.textContent = JSON.stringify(json, null, 2);
+    } catch (err) {
         output.textContent = 'Error: ' + err;
     }
 });
 
-document.getElementById('updateUser').addEventListener('submit', async (e) => {
+// Update User Form - use userId from localStorage
+const updateUserForm = document.getElementById('updateUser');
+if (updateUserForm) {
+    updateUserForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const userId = localStorage.getItem('userId');
+        const body = {
+            user_name: form.user_name.value,
+            user_email: form.user_email.value,
+            user_password: form.user_password.value
+        };
 
-    e.preventDefault(); // Prevent the form from submitting
-    const form = e.target; // Get the form
-    const userId = form.user_id.value; // Get the user ID
+        try {
+            const res = await fetch(`${api}/users/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
 
-    const body = { // Create the request body
-        user_name: form.user_name.value,
-        user_email: form.user_email.value,
-        user_password: form.user_password.value
-    };
+            const json = await res.json();
+            output.textContent = JSON.stringify(json, null, 2);
+        } catch (err) {
+            output.textContent = 'Error: ' + err;
+        }
+    });
+}
 
-    try { // Send a PUT request to the server
+// Other handlers (deleteUser, updateLesson, deleteLesson, getAllUsers, getAllLessons) remain unchanged for brevity.
 
-        const res = await fetch(`${api}/users/${userId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        });
-
-        const json = await res.json(); // Parse the JSON response
-        output.textContent = JSON.stringify(json, null, 2); // Display the response
-
-    } catch (err) { // If there is an error, display it
-        output.textContent = 'Error: ' + err;
-    }
-});
 
 document.getElementById('deleteUser').addEventListener('submit', async (e) => {
 
@@ -135,18 +219,18 @@ document.getElementById('deleteUser').addEventListener('submit', async (e) => {
     }
 });
 
-document.getElementById('getAllUsers').addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent the form from submitting
+// document.getElementById('getAllUsers').addEventListener('submit', async (e) => {
+//     e.preventDefault(); // Prevent the form from submitting
 
-    try { // Send a GET request to the server
-        const res = await fetch(`${api}/users`); // Fetch all users
-        const json = await res.json(); // Parse the JSON response
-        output.textContent = JSON.stringify(json, null, 2); // Display the response
+//     try { // Send a GET request to the server
+//         const res = await fetch(`${api}/users`); // Fetch all users
+//         const json = await res.json(); // Parse the JSON response
+//         output.textContent = JSON.stringify(json, null, 2); // Display the response
 
-    } catch (err) { // If there is an error, display it
-        output.textContent = 'Error: ' + err;
-    }
-});
+//     } catch (err) { // If there is an error, display it
+//         output.textContent = 'Error: ' + err;
+//     }
+// });
 
 document.getElementById('createLesson')
     .addEventListener('submit', async (e) => {
@@ -155,6 +239,7 @@ document.getElementById('createLesson')
         const form = e.target; // Get the form
         // Get the form data
         const data = Object.fromEntries(new FormData(form).entries());
+        data.user = localStorage.getItem('userId');
 
         try { // Send a POST request to the server
 
@@ -172,18 +257,37 @@ document.getElementById('createLesson')
         }
     });
 
-document.getElementById('getAllLessons').addEventListener('submit', async (e) => {
+document.getElementById('getAllLessons')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const userId = localStorage.getItem('userId');
+    if (!userId) return;
 
-    e.preventDefault(); // Prevent the form from submitting
+    try {
+        const res = await fetch(`${api}/lessons`, {
+            credentials: 'include'
+        });
+        const allLessons = await res.json();
+        const userLessons = allLessons.filter(lesson => lesson.user._id === userId);
 
-    try { // Send a GET request to the server
+        const container = document.getElementById('lessonList');
+        container.innerHTML = ''; // Clear old results
+        output.textContent = JSON.stringify(userLessons, null, 2);
 
-        const res = await fetch(`${api}/lessons`); // Fetch all lessons
-        const json = await res.json(); // Parse the JSON response 
-        output.textContent = JSON.stringify(json, null, 2); //
+        userLessons.forEach(lesson => {
+            const btn = document.createElement('button');
+            btn.textContent = `📅 ${lesson.lesson_date} @ ${lesson.lesson_time}`;
+            btn.onclick = () => {
+                document.querySelector('#updateLesson input[name="lesson_id"]').value = lesson._id;
+                document.querySelector('#updateLesson input[name="lesson_date"]').value = lesson.lesson_date.split('T')[0];
+                document.querySelector('#updateLesson select[name="lesson_time"]').value = lesson.lesson_time;
+                document.querySelector('#updateLesson select[name="lesson_status"]').value = lesson.lesson_status;
+                showSection('lesson');
+            };
+            container.appendChild(btn);
+        });
 
-    } catch (err) { // If there is an error, display it
-        output.textContent = 'Error: ' + err;
+    } catch (err) {
+        output.textContent = 'Error fetching lessons: ' + err.message;
     }
 });
 
