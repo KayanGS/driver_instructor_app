@@ -338,31 +338,31 @@ document.getElementById('deleteLesson')?.addEventListener('submit', async (e) =>
         }
     });
 
-document.getElementById('buyTokens').addEventListener('submit', async (e) => {
+// document.getElementById('buyTokens').addEventListener('submit', async (e) => {
 
-    e.preventDefault(); /// Prevent the form from submitting
-    const form = e.target; // Get the form
-    const userId = form.user_id.value.trim(); // Get the user ID
-    const packageType = form.package.value; // Get the package type
+//     e.preventDefault(); /// Prevent the form from submitting
+//     const form = e.target; // Get the form
+//     const userId = form.user_id.value.trim(); // Get the user ID
+//     const packageType = form.package.value; // Get the package type
 
-    if (!userId || !packageType) { // Check if the user ID and package type are empty
+//     if (!userId || !packageType) { // Check if the user ID and package type are empty
 
-        output.textContent = 'Please fill out all fields to buy tokens.';
-        return; // ################# RETURN ###################
-    }
+//         output.textContent = 'Please fill out all fields to buy tokens.';
+//         return; // ################# RETURN ###################
+//     }
 
-    try {  // Send a POST request to the server
+//     try {  // Send a POST request to the server
 
-        const res = await fetch(`${api}/users/${userId}/buy`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ package: packageType })
-        });
+//         const res = await fetch(`${api}/users/${userId}/buy`, {
+//             method: 'POST',
+//             headers: { 'Content-Type': 'application/json' },
+//             body: JSON.stringify({ package: packageType })
+//         });
 
-        const json = await res.json(); // Parse the JSON response
-        output.textContent = JSON.stringify(json, null, 2); // Display the response
+//         const json = await res.json(); // Parse the JSON response
+//         output.textContent = JSON.stringify(json, null, 2); // Display the response
 
-    } catch (err) { // If there is an error, display it
-        output.textContent = 'Error: ' + err;
-    }
-});
+//     } catch (err) { // If there is an error, display it
+//         output.textContent = 'Error: ' + err;
+//     }
+// });

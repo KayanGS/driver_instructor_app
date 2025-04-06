@@ -2,7 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
 /**
- * @desc Get all users
+ * @desc Create a new user
  * @route GET /api/users
  * @access Public
  */
