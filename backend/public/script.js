@@ -59,28 +59,22 @@ if (loginForm) {
                 body: JSON.stringify(data)
             });
 
-            const rawText = await res.text();
-            console.log('🔍 Raw response:', rawText);
+            const result = await res.json();
 
-            let json;
-            try {
-                json = JSON.parse(rawText);
-            } catch (parseErr) {
-                console.error('❌ Failed to parse JSON:', parseErr);
-                output.textContent = 'Login error: Server did not return valid JSON.';
-                return;
-            }
+            if (res.ok && result.user && result.user._id) {
+                localStorage.setItem('user', JSON.stringify(result.user));
+                localStorage.setItem('userId', result.user._id);
 
-            if (res.ok && json.user && json.user._id) {
-                localStorage.setItem('userId', json.user._id);
                 isAuthenticated = true;
                 showAuthenticatedUI(true);
                 showSection('main');
                 output.textContent = 'Login successful!';
             } else {
-                output.textContent = json.message || 'Login failed';
+                output.textContent = result.message || 'Login failed';
             }
+
         } catch (err) {
+            console.error('Login error:', err);
             output.textContent = 'Login error: ' + err.message;
         }
     });
