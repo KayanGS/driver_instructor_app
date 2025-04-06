@@ -42,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // Start server
-const PORT = process.env.PORT || 5001; // Set port
+const PORT = process.env.PORT || 5002; // Set port
 app.listen(PORT, () => console.log(`⚡ Server running on port ${PORT}`)); // Start server
 
 //Print a link in th trminal to connect to the server
