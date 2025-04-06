@@ -17,7 +17,7 @@ function showSection(id) {
 function showAuthenticatedUI(isLoggedIn) {
     const authOnlySections = ['lesson', 'purchase', 'user'];
     const authOnlyButtons = ['nav-lesson', 'nav-purchase', 'nav-user', 'nav-logout'];
-    const guestOnlyButtons = ['nav-login'];
+    const guestOnlyButtons = ['nav-login', 'nav-register'];
 
     authOnlySections.forEach(id => {
         const section = document.getElementById(id);
@@ -79,6 +79,37 @@ if (loginForm) {
         }
     });
 }
+
+document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
+  
+    const errors = validateUserForm(data);
+    if (Object.keys(errors).length > 0) {
+      output.textContent = '⚠️ ' + Object.values(errors).join('\n');
+      return;
+    }
+  
+    try {
+      const res = await fetch(`${api}/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+  
+      const result = await res.json();
+  
+      if (res.ok) {
+        output.textContent = '🎉 Registration successful! You can now log in.';
+        showSection('login');
+      } else {
+        output.textContent = result.message || 'Registration failed.';
+      }
+    } catch (err) {
+      output.textContent = 'Registration error: ' + err.message;
+    }
+});
 
 async function logout() {
     try {

@@ -14,6 +14,9 @@ const { createUser,
     logoutUser } =
     require('../controllers/UserController');
 
+const { registerUser } = require('../controllers/RegistrationController');
+
+router.post('/register', registerUser); // Register a new user
 router.post('/users', validateUser, createUser); // Create a new user
 router.get('/users', getAllUsers); // Get all users
 router.get('/users/:id', getUserByID); // Get a user by ID
