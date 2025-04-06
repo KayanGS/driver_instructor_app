@@ -37,6 +37,12 @@ function showAuthenticatedUI(isLoggedIn) {
 
 window.addEventListener('DOMContentLoaded', () => {
     showAuthenticatedUI(isAuthenticated);
+
+    // console.log("Login button found:", document.getElementById('nav-login'));
+
+    document.getElementById('nav-login')?.addEventListener('click', () => {
+        showSection('login');
+    });
 });
 
 const loginForm = document.getElementById('loginForm');
@@ -320,8 +326,7 @@ document.getElementById('updateLesson')
         }
     });
 
-document.getElementById('deleteLesson')
-    .addEventListener('submit', async (e) => {
+document.getElementById('deleteLesson')?.addEventListener('submit', async (e) => {
 
         e.preventDefault(); // Prevent the form from submitting
         const lessonId = e.target.lesson_id.value; // Get the lesson ID
