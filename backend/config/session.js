@@ -1,14 +1,16 @@
-const session = require('express-session');
+// filepath: backend/config/session.js
+const session = require('express-session') // Import express-session;
 
+// Import express-session
 const sessionMiddleware = session({
-    secret: 'your_session_secret_here', // Replace with a secure secret or use process.env.SECRET
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: false, // set to true if using HTTPS
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 // 1 hour
+    secret: 'jJ4#s$%2Pq@L!&9rX8t@Zb!2wL9s*VhP', // Secret key for signing the session ID cookie
+    resave: false, // Forces session to be saved back to the session store
+    saveUninitialized: false,// Forces a session that is "uninitialized" to be saved to the store
+    cookie: { // Cookie settings
+        secure: false, // Set to true if using HTTPS
+        httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+        maxAge: 1000 * 60 * 60 // Cookie expiration time (1 hour)
     }
 });
 
-module.exports = sessionMiddleware;
+module.exports = sessionMiddleware; // Export session middleware

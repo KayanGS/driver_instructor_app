@@ -1,11 +1,13 @@
-// controllers/UserController.js
+//filepath: backend/controllers/UserController.js
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 
+
 exports.registerUser = async (req, res) => {
-  try {
+
+  try { // Check if the request is a POST request
     console.log('➡️ registerUser controller hit');
-    const { user_name, user_email, user_password } = req.body;
+    const { user_name, user_email, user_password } = req.body; // Extracting user data from the request body
     console.log('📥 Data received:', { user_name, user_email });
 
     // Basic check
@@ -21,7 +23,7 @@ exports.registerUser = async (req, res) => {
       return res.status(409).json({ message: 'Email already registered' });
     }
 
-    const hashedPassword = await bcrypt.hash(user_password, 10);
+    const hashedPassword = await bcrypt.hash(user_password, 10); // Hash the password
 
     const newUser = new User({
       user_name,
@@ -33,6 +35,7 @@ exports.registerUser = async (req, res) => {
     await newUser.save();
 
     res.status(201).json({
+
       message: 'Registration successful',
       user: {
         _id: newUser._id,
@@ -40,8 +43,13 @@ exports.registerUser = async (req, res) => {
         user_email: newUser.user_email,
         user_role: newUser.user_role
       }
+
     });
+
   } catch (error) {
-    res.status(500).json({ message: 'Server error during registration', error: error.message });
+    res.status(500).json({
+      message: 'Server error during registration',
+      error: error.message
+    });
   }
 };

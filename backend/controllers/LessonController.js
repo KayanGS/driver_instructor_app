@@ -85,18 +85,21 @@ exports.getLessonByID = async (req, res) => {
  */
 exports.getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find({ user: req.session.userId }) // ✨ Only fetch user's lessons
-            .select('lesson_date lesson_time lesson_status') // cleaner output
+        const lessons = await Lesson.find({}) // get all lessons
+            .populate({ path: 'user', select: '_id user_name user_email' }) // make sure user is populated
+            .select('lesson_date lesson_time lesson_status user')
             .sort({ lesson_date: 1, lesson_time: 1 });
 
         res.status(200).json(lessons);
     } catch (error) {
+        console.error('❌ Error in getAllLessons:', error);
         res.status(500).json({
             message: 'Server error while fetching lessons',
             error: error.message
         });
     }
-}
+};
+
 
 
 /**

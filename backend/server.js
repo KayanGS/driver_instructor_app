@@ -19,7 +19,7 @@ app.use(express.json()); // Parse JSON bodies
 const userRoutes = require('./routes/user_routes'); // Import user routes 
 const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
 
-// Middleware
+// Middleware   
 
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
