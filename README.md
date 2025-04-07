@@ -31,8 +31,10 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │── 📂 backend/
 │   ├── 📂 config/                  # Database connection
 │   │    ├── database.js
+│   │    ├── session.js
 │   ├── 📂 controllers/             # CRUD operations
 │   │    ├── LessonController.js
+│   │    ├── RegistrationController.js
 │   │    ├── UserController.js
 │   ├── 📂 Middleware/              # Authentication & Authorization Middleware  
 │   ├── 📂 models/                  # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
@@ -47,17 +49,20 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   ├── 📂 validation/              # Server-side validation
 │   │    ├── lessonValidation.js
 │   │    ├── userValidation.js
-│   ├── 📂 validation/              # Temporary EJS frontend
-│   │    ├── 📂 validation/
+│   ├── 📂 views/              # 
+Temporary EJS frontend
+│   │    ├── 📂 partials/
 │   │    │    ├── footer.ejs
 │   │    │    ├── header.ejs
 │   │    │    ├── lesson_forms.ejs
+│   │    │    ├── login_form.ejs
 │   │    │    ├── nav.ejs
 │   │    │    ├── purchase_form.ejs
+│   │    │    ├── register_form.ejs
 │   │    │    ├── user_forms.ejs             
 │   │    ├── index.ejs
-│   ├── server.js                   # Main Express server
-├── package.json                    # Dependencies & scripts    
+│   ├── package.json
+│   ├── server.js                   # Dependencies & scripts    
 ├── .env                            # Environment variables
 ├── README.md                       # Documentation
 ```
