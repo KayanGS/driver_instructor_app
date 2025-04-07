@@ -1,4 +1,5 @@
-const api = 'http://localhost:5000/api'; // API URL
+// const api = 'http://localhost:5000/api'; // API URL
+const api = window.location.origin + '/api';
 const output = document.getElementById('output');
 let isAuthenticated = !!localStorage.getItem('userId');
 
