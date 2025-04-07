@@ -1,6 +1,9 @@
+<!-- CREATE LESSON -->
 <form id="createLesson">
     <h2>Create Lesson</h2>
-    <label>Date: <input type="date" name="lesson_date" required /></label>
+    <label>Date:
+        <input type="date" name="lesson_date" required />
+    </label>
     <label>Time:
         <select name="lesson_time" required>
             <option value="">-- Select Time --</option>
@@ -18,38 +21,13 @@
     <button type="submit">Book Lesson</button>
 </form>
 
-<form id="updateLesson">
-    <h2>Update Lesson</h2>
-    <label>Lesson ID: <input type="text" name="lesson_id" required readonly /></label>
-    <label>New Date: <input type="date" name="lesson_date" /></label>
-    <label>Time:
-        <select name="lesson_time" required>
-            <option value="">-- Select Time --</option>
-            <option value="08:00">08:00</option>
-            <option value="09:00">09:00</option>
-            <option value="10:00">10:00</option>
-            <option value="13:00">13:00</option>
-            <option value="14:00">14:00</option>
-            <option value="15:00">15:00</option>
-            <option value="16:00">16:00</option>
-            <option value="17:00">17:00</option>
-            <option value="18:00">18:00</option>
-        </select>
-    </label>
-    <label>Status:
-        <select name="lesson_status">
-            <option value="">-- Choose Status --</option>
-            <option value="scheduled">Scheduled</option>
-            <option value="completed">Completed</option>
-            <option value="cancelled">Cancelled</option>
-        </select>
-    </label>
-    <button type="submit">Update Lesson</button>
-</form>
-
+<!-- GET LESSONS AND DISPLAY -->
 <form id="getAllLessons">
     <h2>Get My Lessons</h2>
     <button type="submit">Fetch</button>
 </form>
 
-<div id="lessonList" class="lesson-list"></div>
+<!-- Lessons appear here -->
+<div id="lessonList" class="lesson-list"
+    style="margin-top: 2rem; display: flex; flex-direction: column; gap: 1.25rem; max-width: 600px; margin-inline: auto;">
+</div>
