@@ -1,13 +1,13 @@
 //filepath: backend/config/database.js
 // Load environment variables
 // require('dotenv').config({ path: '../.env' });
-require('dotenv').config();
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
 
 const mongoose = require('mongoose');
 
 //Used for debbuging
-//console.log('Environment Variables:', process.env);
-//console.log('MongoDB URI:', process.env.MONGODB_URI);
+// console.log('Environment Variables:', process.env);
+// console.log('MongoDB URI:', process.env.MONGODB_URI);
 
 const connectDB = async () => {
     try {

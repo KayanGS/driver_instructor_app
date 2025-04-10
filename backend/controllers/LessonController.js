@@ -85,8 +85,8 @@ exports.getLessonByID = async (req, res) => {
  */
 exports.getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find({}) // get all lessons
-            .populate({ path: 'user', select: '_id user_name user_email' }) // make sure user is populated
+        const lessons = await Lesson.find({})
+            .populate({ path: 'user', select: '_id user_name user_email' })
             .select('lesson_date lesson_time lesson_status user')
             .sort({ lesson_date: 1, lesson_time: 1 });
 

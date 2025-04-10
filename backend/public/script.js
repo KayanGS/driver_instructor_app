@@ -191,7 +191,6 @@ function validateUserForm(data) {
 
 
 
-
 // ################################  BUY TOKENS ################################
 document.getElementById('buyTokens')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -218,7 +217,6 @@ document.getElementById('buyTokens')?.addEventListener('submit', async (e) => {
     }
 });
 // ############################## END OF BUY TOKENS ###########################
-
 
 
 

@@ -3,7 +3,7 @@ const session = require('express-session') // Import express-session;
 
 // Import express-session
 const sessionMiddleware = session({
-    secret: 'jJ4#s$%2Pq@L!&9rX8t@Zb!2wL9s*VhP', // Secret key for signing the session ID cookie
+    secret: process.env.SESSION_SECRET, // Secret key for signing the session ID cookie
     resave: false, // Forces session to be saved back to the session store
     saveUninitialized: false,// Forces a session that is "uninitialized" to be saved to the store
     cookie: { // Cookie settings

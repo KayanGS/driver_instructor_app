@@ -14,6 +14,7 @@ exports.validateUser = [
         .isEmail().withMessage('Invalid email address'), // Check if the email is in a valid format
 
     body('user_password') // Validate the password
+        .trim() // Trim the name removing any leading or trailing white spaces
         .notEmpty().withMessage('Password is required') // Check if the password is empty
         // Check if the password is at least 6 characters long
         .isLength({ min: 6 }).withMessage('Password must be at least 6 characters long')
