@@ -1,29 +1,35 @@
-//filepath: //backend/routes/user_routes.js
-const express = require('express'); // Import express
-const { validateUser } = require('../validation/userValidation');
+// filepath: backend/routes/user_routes.js
 
-const router = express.Router(); // Create a router
-// Import the user controller
-const { createUser,
+const express = require('express');
+const { validateUser } = require('../validation/userValidation');
+const requestLimiter = require('../middleware/requestLimiter');
+
+const { isAuthenticated } = require('../middleware/authMiddleware');
+
+const {
+    registerUser,
     getAllUsers,
     getUserByID,
     updateUserByID,
     deleteUserByID,
     buyTokens,
     loginUser,
-    logoutUser } =
-    require('../controllers/UserController');
+    logoutUser
+} = require('../controllers/UserController');
 
-const { registerUser } = require('../controllers/RegistrationController');
+const router = express.Router();
 
-router.post('/register', registerUser); // Register a new user
-router.post('/users', validateUser, createUser); // Create a new user
-router.get('/users', getAllUsers); // Get all users
-router.get('/users/:id', getUserByID); // Get a user by ID
-router.put('/users/:id', validateUser, updateUserByID); // Update a user by ID
-router.delete('/users/:id', deleteUserByID); // Delete a user by ID
-router.post('/users/:id/buy', buyTokens); // Buy tokens for a user
-router.post('/login', loginUser); // Login a user
-router.post('/logout', logoutUser); // Logout a user
+// Public Routes
+router.post('/register', requestLimiter, registerUser); // Register a new user
+router.post('/login', requestLimiter, loginUser); // Login a user
 
-module.exports = router; // Export the router
+// Protected Routes
+router.post('/logout', requestLimiter, isAuthenticated, logoutUser); // Logout a user
+//router.post('/users', requestLimiter, validateUser, createUser); // Admin Create User
+router.get('/users', requestLimiter, isAuthenticated, getAllUsers); // Get all users
+router.get('/users/:id', requestLimiter, isAuthenticated, getUserByID); // Get user by ID
+router.put('/users/:id', requestLimiter, isAuthenticated, validateUser, updateUserByID); // Update user
+router.delete('/users/:id', requestLimiter, isAuthenticated, deleteUserByID); // Delete user
+router.post('/users/:id/buy', requestLimiter, isAuthenticated, buyTokens); // Buy tokens
+
+module.exports = router;
