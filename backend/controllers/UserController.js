@@ -1,53 +1,104 @@
+//filepath: backend/controllers/UserController.js
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-/**
- * @desc Create a new user
- * @route GET /api/users
- * @access Public
- */
-exports.createUser = async (req, res) => {
 
+exports.registerUser = async (req, res) => {
     try {
-        // Destructure user_name, user_email, user_password from req.body
+        console.log('➡️ registerUser controller hit');
         const { user_name, user_email, user_password } = req.body;
-        // Hash the user_password using bcrypt
-        const hashed_password = await bcrypt.hash(user_password, 10);
-        // Create a new user
-        const new_user = new User({
+        console.log('📥 Data received:', { user_name, user_email });
+
+        if (!user_name || !user_email || !user_password) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
+
+        const normalizedEmail = user_email.toLowerCase();
+        const existingUser = await User.findOne({ user_email: normalizedEmail });
+        if (existingUser) {
+            return res.status(409).json({ message: 'Email already registered' });
+        }
+
+        const hashedPassword = await bcrypt.hash(user_password, 10);
+
+        const newUser = new User({
             user_name,
-            user_email,
-            user_password: hashed_password,
+            user_email: normalizedEmail,
+            user_password: hashedPassword,
+            user_role: 'user'
         });
 
-        await new_user.save(); // Save the new user to the database
-        // Send a response to the client
+        await newUser.save();
+
         res.status(201).json({
-            message: 'User created successfully',
-            new_user,
+            message: 'Registration successful',
+            user: {
+                _id: newUser._id,
+                user_name: newUser.user_name,
+                user_email: newUser.user_email,
+                user_role: newUser.user_role
+            }
         });
-
-    } catch (error) { // Catch any errors
-        res.status(400).json({ error: error.message });
+    } catch (error) {
+        res.status(500).json({
+            message: 'Server error during registration',
+            error: error.message
+        });
     }
 };
+// /**
+//  * @desc Create a new user
+//  * @route GET /api/users
+//  * @access Public
+//  */
+// exports.createUser = async (req, res) => {
+
+//     try {
+//         // Destructure user_name, user_email, user_password from req.body
+//         const { user_name, user_email, user_password } = req.body;
+//         // Hash the user_password using bcrypt
+//         const hashed_password = await bcrypt.hash(user_password, 10);
+//         // Create a new user
+//         const new_user = new User({
+//             user_name,
+//             user_email,
+//             user_password: hashed_password,
+//         });
+
+//         await new_user.save(); // Save the new user to the database
+//         // Send a response to the client
+//         res.status(201).json({
+//             message: 'User created successfully',
+//             new_user,
+//         });
+
+//     } catch (error) { // Catch any errors
+//         res.status(400).json({ error: error.message });
+//     }
+// };
 
 exports.loginUser = async (req, res) => {
     const { user_email, user_password } = req.body;
     try {
         const user = await User.findOne({ user_email });
         if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({
+                message: 'Invalid email or password'
+            });
         }
 
         const isMatch = await bcrypt.compare(user_password, user.user_password);
         if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({
+                message: 'Invalid email or password'
+            });
         }
 
         // Safeguard: Check if req.session is available
         if (!req.session) {
-            return res.status(500).json({ message: 'Session middleware not working properly.' });
+            return res.status(500).json({
+                message: 'Session middleware not working properly.'
+            });
         }
 
         req.session.userId = user._id;
@@ -68,10 +119,15 @@ exports.logoutUser = (req, res) => {
         req.session.destroy(err => {
             if (err) {
                 console.error('Logout error:', err);
-                return res.status(500).json({ message: 'Logout failed', error: err.message });
+                return res.status(500).json({
+                    message: 'Logout failed',
+                    error: err.message
+                });
             } else {
                 res.clearCookie('connect.sid'); // Default session cookie name
-                return res.status(200).json({ message: 'Logged out successfully' });
+                return res.status(200).json({
+                    message: 'Logged out successfully'
+                });
             }
         });
     } else {

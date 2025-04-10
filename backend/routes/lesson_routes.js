@@ -1,9 +1,9 @@
 const express = require('express');
+const requestLimiter = require('../middleware/requestLimiter');
+const { isAuthenticated } = require('../middleware/authMiddleware');
 const {
     validateLessonForCreate,
     validateLessonForUpdate } = require('../validation/lessonValidation');
-const { isAuthenticated } = require('../middleware/authMiddleware');
-
 const {
     createLesson,
     getAllLessons,
@@ -17,18 +17,26 @@ const router = express.Router();
 // Secure these routes with isAuthenticated
 router.post(
     '/lessons',
+    requestLimiter,
     isAuthenticated,
     ...validateLessonForCreate,
     createLesson);
 
-router.get('/lessons', isAuthenticated, getAllLessons);
-router.get('/lessons/:id', isAuthenticated, getLessonByID);
+router.get('/lessons', requestLimiter, isAuthenticated, getAllLessons);
+router.get('/lessons/:id', requestLimiter, isAuthenticated, getLessonByID);
 router.put(
     '/lessons/:id',
+    requestLimiter,
     isAuthenticated,
     ...validateLessonForUpdate,
-    updateLessonByID);
+    updateLessonByID
+);
 
-router.delete('/lessons/:id', isAuthenticated, deleteLessonByID);
+router.delete(
+    '/lessons/:id',
+    requestLimiter,
+    isAuthenticated,
+    deleteLessonByID
+);
 
 module.exports = router;
