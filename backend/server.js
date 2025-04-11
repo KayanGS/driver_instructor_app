@@ -3,6 +3,8 @@
 const express = require('express'); // Import express
 const connectDB = require('./config/database.js'); // Import database connection
 const sessionMiddleware = require('./config/session');
+const cors = require('cors');
+
 
 
 const path = require('path');
@@ -18,6 +20,10 @@ app.use(express.json()); // Parse JSON bodies
 
 const userRoutes = require('./routes/user_routes'); // Import user routes 
 const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
 
 // Middleware   
 
@@ -34,6 +40,9 @@ app.get('/users', (req, res) => {
 app.get('/lessons', (req, res) => {
     res.render('lessons');
 });
+
+
+
 
 
 // Serve static files from /public
