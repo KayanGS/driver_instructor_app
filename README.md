@@ -31,43 +31,48 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │── 📂 backend/
 │   ├── 📂 config/                  # Database connection
 │   │    ├── database.js
-│   │    ├── session.js
+│   │    └── session.js
 │   ├── 📂 controllers/             # CRUD operations
 │   │    ├── LessonController.js
 │   │    ├── RegistrationController.js
-│   │    ├── UserController.js
+│   │    └── UserController.js
 │   ├── 📂 Middleware/              # Authentication & Authorization Middleware
 │   │    ├── authMiddleware.js
 │   │    ├── ownershipMiddleware.js
 │   │    ├── requestLimiter.js
-│   │    ├── roleLimiter.js
+│   │    └── roleLimiter.js
 │   ├── 📂 models/                  # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
 │   │    ├── Lesson.js
-│   │    ├── User.js
-│   ├── 📂 public/                  # Temporary frontend
-│        ├── script.js
-│        ├── style.css
+│   │    └── User.js
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
 │   │    ├── lesson_routes.js   
-│   │    ├── user_routes.js
+│   │    └── user_routes.js
 │   ├── 📂 validation/              # Server-side validation
 │   │    ├── lessonValidation.js
-│   │    ├── userValidation.js
-│   ├── 📂 views/              # 
-Temporary EJS frontend
-│   │    ├── 📂 partials/
-│   │    │    ├── footer.ejs
-│   │    │    ├── header.ejs
-│   │    │    ├── lesson_forms.ejs
-│   │    │    ├── login_form.ejs
-│   │    │    ├── nav.ejs
-│   │    │    ├── purchase_form.ejs
-│   │    │    ├── register_form.ejs
-│   │    │    ├── user_forms.ejs             
-│   │    ├── index.ejs
+│   │    └── userValidation.js
 │   ├── package.json
-│   ├── server.js                   # Dependencies & scripts    
-├── .env                            # Environment variables
+│   └── server.js                   # Dependencies & scripts
+│── 📂 frontend/
+│   ├── 📂 public/
+│   │    └── index.html
+│   ├── 📂 src/
+│   │    ├── 📂 assets/
+│   │    │    └── logo.png
+│   │    ├── 📂 Components/
+│   │    │    ├── AuthForm.js
+│   │    │    └── Navbar.js
+│   │    ├── 📂 pages/
+│   │    │    ├── AuthPage.js
+│   │    │    ├── PurchasePage.js
+│   │    │    └── WelcomePage.js
+│   │    └── 📂 styles/
+│   │    │    ├── Auth.css
+│   │    │    ├── Navbar.css
+│   │    │    ├── PurchasePage.css
+│   │    │    └── WelcomePage.css
+│   │    ├── App.js
+│   │    ├── index.css
+│   │    └── index.js
 ├── README.md                       # Documentation
 ```
 
