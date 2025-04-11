@@ -38,7 +38,9 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   │    ├── UserController.js
 │   ├── 📂 Middleware/              # Authentication & Authorization Middleware
 │   │    ├── authMiddleware.js
-│   │    ├── viewLimiter.js
+│   │    ├── ownershipMiddleware.js
+│   │    ├── requestLimiter.js
+│   │    ├── roleLimiter.js
 │   ├── 📂 models/                  # Mongoose models (User, Lesson, Purchase, TimeSlot, etc.)
 │   │    ├── Lesson.js
 │   │    ├── User.js
