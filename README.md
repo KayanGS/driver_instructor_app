@@ -12,7 +12,7 @@ A web application for managing driving lessons, time slots, and purchases. Built
 ## Technologies
 - **Backend**: Node.js, Express.js, MongoDB
 - **Frontend**: React.js
-- **Deployment**: Not Decided yet
+- **Deployment**: Render
 
 ## Installation
 1. Clone the repository:
