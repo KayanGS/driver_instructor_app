@@ -85,10 +85,12 @@ exports.getLessonByID = async (req, res) => {
  */
 exports.getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find({})
-            .populate({ path: 'user', select: '_id user_name user_email' })
-            .select('lesson_date lesson_time lesson_status user')
-            .sort({ lesson_date: 1, lesson_time: 1 });
+        const lessons = req.filteredLessons;
+
+        if (!Array.isArray(lessons)) {
+            return res.status(500).json({ message: 'Lesson data is not an array.' });
+        }
+        console.log('📥 getAllLessons called. Lessons received:', req.filteredLessons?.length);
 
         res.status(200).json(lessons);
     } catch (error) {
@@ -99,6 +101,7 @@ exports.getAllLessons = async (req, res) => {
         });
     }
 };
+
 
 
 

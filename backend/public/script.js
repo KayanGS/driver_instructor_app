@@ -48,18 +48,6 @@ function showAuthenticatedUI(isLoggedIn) {
         if (el) el.classList.toggle('hidden', isLoggedIn);
     });
 }
-
-window.addEventListener('DOMContentLoaded', () => {
-    showAuthenticatedUI(isAuthenticated);
-
-    if (isAuthenticated) {
-        fetchUserLessons();
-    }
-
-    document.getElementById('nav-login')?.addEventListener('click', () => {
-        showSection('login');
-    });
-});
 // ################## END OF FUNCTIONS FOR NAVIGATION AND UI ###################
 
 
@@ -480,15 +468,11 @@ document.getElementById('getAllLessons')?.addEventListener('submit', async (e) =
             container.appendChild(card);
         });
 
-
-
-
     } catch (err) {
         console.error('💥 Error fetching lessons:', err);
         output.textContent = 'Error fetching lessons: ' + err.message;
     }
 });
-
 
 
 // ########################## END OF LESSON MANAGEMENT ########################
