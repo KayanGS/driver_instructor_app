@@ -1,5 +1,14 @@
 //filepath: /controllers/LessonController.js
 
+/**
+ * @description Handles lesson-related operations such as creating, updating, deleting, and fetching lessons.
+ * @module LessonController
+ * @requires module:express
+ * @requires module:../models/Lesson
+ * @requires module:../models/User
+ */
+
+// ################################## IMPORTS ##################################
 const Lesson = require('../models/Lesson'); // Importing the Lesson model
 const User = require('../models/User'); // Importing the User model
 

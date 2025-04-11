@@ -1,0 +1,38 @@
+/* filepath: frontend/src/assets/Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f1e4c3;
+    padding: 10px 20px;
+    font-family: sans-serif;
+}
+
+.logo img {
+    height: 40px;
+}
+
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    text-decoration: underline;
+}
