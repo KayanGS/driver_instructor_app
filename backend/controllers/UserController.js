@@ -102,6 +102,7 @@ exports.loginUser = async (req, res) => {
         }
 
         req.session.userId = user._id;
+        req.session.userRole = user.user_role;
         res.status(200).json({ message: 'Login successful', user });
     } catch (error) {
         res.status(500).json({ message: 'Login failed', error: error.message });
