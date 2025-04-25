@@ -1,5 +1,8 @@
 //filepath: //backend/server.js
 
+// Load environment variables
+require('dotenv').config();
+
 const express = require('express'); // Import express
 const connectDB = require('./config/database.js'); // Import database connection
 const sessionMiddleware = require('./config/session');
@@ -30,16 +33,16 @@ app.use(cors({
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
 
-app.get('/', (req, res) => {
-    res.render('index');
-});
-app.get('/users', (req, res) => {
-    res.render('users');
-});
+// app.get('/', (req, res) => {
+//     res.render('index');
+// });
+// app.get('/users', (req, res) => {
+//     res.render('users');
+// });
 
-app.get('/lessons', (req, res) => {
-    res.render('lessons');
-});
+// app.get('/lessons', (req, res) => {
+//     res.render('lessons');
+// });
 
 
 
