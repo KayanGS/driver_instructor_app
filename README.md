@@ -60,13 +60,19 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   │    │    └── logo.png
 │   │    ├── 📂 Components/
 │   │    │    ├── AuthForm.js
+│   │    │    ├── Footer.js
 │   │    │    └── Navbar.js
 │   │    ├── 📂 pages/
 │   │    │    ├── AuthPage.js
+│   │    │    ├── BookLesson.js
+│   │    │    ├── FaqContactPage.js
 │   │    │    ├── PurchasePage.js
 │   │    │    └── WelcomePage.js
 │   │    └── 📂 styles/
 │   │    │    ├── Auth.css
+│   │    │    ├── BookLesson.css
+│   │    │    ├── FaqContactPage.css
+│   │    │    ├── Footer.css
 │   │    │    ├── Navbar.css
 │   │    │    ├── PurchasePage.css
 │   │    │    └── WelcomePage.css
@@ -79,14 +85,13 @@ A web application for managing driving lessons, time slots, and purchases. Built
 ## Work Distribution
 | Task                                      | Assigned To |
 |-------------------------------------------|-------------|
-| **Project setup & dependencies**          | Kayan       |
-| **User authentication (Login/Signup)**    | Ekaterina   |
-| **CRUD operations for Users**             | Kayan       |
-| **CRUD operations for Lessons**           | Kayan       |
-| **Payment system integration**            | Ekaterina   |
-| **Session & Cookie Management**           | Ekaterina   |
-| **Form validation**                       | Kayan       |
-| **JWT Authentication Middleware**         | Ekaterina   |
-| **Small frontend UI for testing backend** | Kayan       |
-| **Deployment & Documentation**            | Both        |
-
+| **Improve Session Security**              | Kayan       |
+| **Rate Limiting, Controller Structure**   |             |
+| **Ownership protection, admin roles**     |             |
+| **Remove old UI, setup React Frontend**   |             |
+| **w/ routing, auth, and token purchase**  |             |
+|                                           |             |
+| **Integrate EmailJS for contact form**    | Ekaterina   |
+| **Integrate react-calendar in Booking**   |             |
+| **Implement Footer component**            |             |
+| **FAQ & Contact page, Book Lesson UI**    |             |
