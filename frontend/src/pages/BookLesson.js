@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
-import '../styles/BookLesson.css';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';  // Default styles
+import '../styles/BookLesson.css'; //custom styles
 
 const lessonTypes = [
   { id: 'single', label: 'Single Lesson', price: '50€', description: '60 minutes class.' },
-  { id: 'package6', label: '6-Lesson Package', price: '300€', description: '6×60 Minutes Classes.' },
-  { id: 'package12', label: '12-Lesson Package', price: '600€', description: '12 Mandatory 60 minutes EDT Lessons.' }
+  { id: 'package6', label: '6-Lesson Package', price: '250€', description: '6×60 Minutes Classes.' },
+  { id: 'package12', label: '12-Lesson Package', price: '500€', description: '12 Mandatory 60 minutes EDT Lessons.' }
 ];
 
 const timeSlots = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
 
 const BookLesson = () => {
   const [selectedType, setSelectedType] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
 
   const handleContinue = () => {
-    if (!selectedType || !selectedTime) {
-      alert('Please select lesson type and time slot!');
+    if (!selectedType || !selectedDate || !selectedTime) {
+      alert('Please select lesson type, date, and time slot!');
     } else {
-      alert(`Lesson booked!\nType: ${selectedType}\nTime: ${selectedTime}`);
+      alert(`Lesson booked!\nType: ${selectedType}\nDate: ${selectedDate.toDateString()}\nTime: ${selectedTime}`);
     }
   };
 
@@ -43,12 +46,15 @@ const BookLesson = () => {
         ))}
       </div>
 
-      {/* Date Picker Placeholder */}
+      {/* Date Picker */}
       <div className="selector-box">
         <h3>Select Date</h3>
-        <div className="calendar-placeholder">
-          Calendar Coming Soon
-        </div>
+        <Calendar
+          onChange={setSelectedDate}
+          value={selectedDate}
+          minDate={new Date()}  // Disable past dates
+          tileDisabled={({ date, view }) => view === 'month' && (date.getDay() === 0)}  // Disable Sundays
+        />
       </div>
 
       {/* Time Slot Selector */}
