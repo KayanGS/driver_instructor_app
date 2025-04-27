@@ -1,0 +1,94 @@
+.book-lesson-container {
+    background-color: #fdf6e3;
+    min-height: 100vh;
+    padding: 2rem;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.selector-box {
+    background-color: #b0afaa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+}
+
+.selector-box h3 {
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.lesson-type-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border: 1px solid #000;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    background-color: #ccc;
+    transition: background-color 0.2s ease;
+}
+
+.lesson-type-option:hover {
+    background-color: #bbb;
+}
+
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 1rem;
+}
+
+.time-slot {
+    padding: 10px;
+    background-color: #eee;
+    border: 1px solid #999;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease;
+}
+
+.time-slot:hover {
+    background-color: #ddd;
+}
+
+.time-slot.selected {
+    background-color: #333;
+    color: white;
+}
+
+.continue-btn {
+    padding: 10px 30px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.continue-btn:hover {
+    background-color: #333;
+}
+
+/* Placeholder calendar styling */
+.calendar-placeholder {
+    background-color: #ccc;
+    height: 300px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #555;
+    font-size: 1.2rem;
+}

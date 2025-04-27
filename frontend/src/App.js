@@ -5,8 +5,12 @@ import Navbar from './components/Navbar';
 import WelcomePage from './pages/WelcomePage';
 import AuthPage from './pages/AuthPage';
 import PurchasePage from './pages/PurchasePage';
+import BookLesson from './components/BookLesson';
 
 function App() {
+  //mock user ID
+  const currentUserId = '64b7f1a2c9d5e123456789ab';
+
   return (
     <Router>
       <Navbar />
@@ -14,6 +18,7 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/purchase" element={<PurchasePage />} />
+        <Route path="/book-lesson" element={<BookLesson />} />
       </Routes>
     </Router>
   );
