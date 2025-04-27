@@ -41,3 +41,18 @@
 .package-option input[type="radio"] {
     margin-right: 1rem;
 }
+
+.purchase-button {
+    padding: 10px 30px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+.purchase-button:hover {
+    background-color: #333;
+}
