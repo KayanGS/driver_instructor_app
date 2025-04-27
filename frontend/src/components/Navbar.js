@@ -43,7 +43,7 @@ const Navbar = () => {
             <ul className="nav-links">
                 <li><a href="/purchase">Lessons Packages</a></li>
                 <li><a href="/book-lesson">Book A Lesson</a></li>
-                <li><a href="#">FAQ and Contact</a></li>
+                <li><a href="/faq">FAQ and Contact</a></li>
                 {!isAuthenticated ? (
                     <li><a href="/login">Login/Register</a></li>
                 ) : (

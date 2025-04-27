@@ -7,7 +7,7 @@ const lessonTypes = [
   { id: 'package12', label: '12-Lesson Package', price: '600€', description: '12 Mandatory 60 minutes EDT Lessons.' }
 ];
 
-const timeSlots = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM'];
+const timeSlots = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
 
 const BookLesson = () => {
   const [selectedType, setSelectedType] = useState('');

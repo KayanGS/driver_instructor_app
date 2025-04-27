@@ -3,3 +3,18 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+
+/* Ensure full height for Flexbox layout */
+html, body, #root {
+    height: 100%;
+}
+
+.app-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}

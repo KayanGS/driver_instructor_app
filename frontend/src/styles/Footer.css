@@ -1,0 +1,23 @@
+.footer {
+    background-color: #000;
+    color: white;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    font-family: sans-serif;
+}
+
+.footer div {
+    margin: 1rem 0;
+}
+
+.footer a {
+    color: white;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

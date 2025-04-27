@@ -1,0 +1,101 @@
+/* General Page Styling */
+.faq-contact-container {
+    background-color: #fdf6e3;
+    font-family: sans-serif;
+    padding: 2rem;
+}
+
+/* FAQ Section */
+.faq-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.faq-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.faq-card {
+    background-color: #b0afaa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    margin: 1rem auto;
+    max-width: 700px;
+    text-align: left;
+}
+
+.faq-card h4 {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.faq-card h4::before {
+    content: "❓";
+    margin-right: 10px;
+    font-size: 1.3rem;
+}
+
+.show-more-btn {
+    margin-top: 1rem;
+    padding: 10px 25px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.show-more-btn:hover {
+    background-color: #333;
+}
+
+/* Contact Form */
+.contact-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.contact-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.contact-form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 0.8rem;
+    border-radius: 10px;
+    border: 1px solid #aaa;
+    background-color: #ccc;
+}
+
+.contact-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.send-message-btn {
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.send-message-btn:hover {
+    background-color: #333;
+}
