@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import emailjs from '@emailjs/browser';
 import '../styles/FaqContactPage.css';
 
 const FaqContactPage = () => {
+  const form = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    emailjs.sendForm('service_s0z4nma', 'template_yhztzif', form.current, 'VOEjfLOyyqjmOvir6')
+      .then((result) => {
+          console.log('Message Sent:', result.text);
+          alert("Message sent successfully!");
+          form.current.reset();
+      }, (error) => {
+          console.error('EmailJS Error:', error);   // 👈 This will show detailed info
+          alert("Failed to send message, please try again.");
+      });
+  };
+
   return (
     <div className="faq-contact-container">
       
@@ -30,10 +47,10 @@ const FaqContactPage = () => {
       <section className="contact-section">
         <h2 className="contact-title">Get In Touch</h2>
 
-        <form className="contact-form">
-          <input type="text" placeholder="Your Name" required />
-          <input type="email" placeholder="Your Email" required />
-          <textarea placeholder="Your Message" required></textarea>
+        <form ref={form} onSubmit={sendEmail} className="contact-form">
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea name="message" placeholder="Your Message" required></textarea>
           <button type="submit" className="send-message-btn">Send Message</button>
         </form>
       </section>
