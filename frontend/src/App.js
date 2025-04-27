@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import WelcomePage from './pages/WelcomePage';
 import AuthPage from './pages/AuthPage';
 import PurchasePage from './pages/PurchasePage';
-import BookLesson from './components/BookLesson';
+import BookLesson from './pages/BookLesson';
 
 function App() {
   //mock user ID
