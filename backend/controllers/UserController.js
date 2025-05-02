@@ -2,25 +2,36 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
-
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @returns 
+ * @route POST /api/register
+ * @access Public
+ * @description This function handles user registration. It checks if the user 
+ * already exists, hashes the password, and saves the new user to the database.
+ */
 exports.registerUser = async (req, res) => {
     try {
-        console.log('➡️ registerUser controller hit');
+        console.log('➡️ registerUser controller hit'); // Log the request
+        // Destructure user_name, user_email, user_password from req.body
         const { user_name, user_email, user_password } = req.body;
         console.log('📥 Data received:', { user_name, user_email });
 
-        if (!user_name || !user_email || !user_password) {
-            return res.status(400).json({ message: 'All fields are required' });
+        if (!user_name || !user_email || !user_password) { // Check if all fields are provided
+            return res.status(400).json({ message: 'All fields are required' }); // ######### RETURN ##########
         }
 
-        const normalizedEmail = user_email.toLowerCase();
-        const existingUser = await User.findOne({ user_email: normalizedEmail });
-        if (existingUser) {
-            return res.status(409).json({ message: 'Email already registered' });
+        const normalizedEmail = user_email.toLowerCase(); // Normalize email to lowercase
+        const existingUser = await User.findOne({ user_email: normalizedEmail }); // Check if user already exists
+        if (existingUser) { // If user exists
+            return res.status(409).json({ message: 'Email already registered' }); // ######### RETURN ##########
         }
 
-        const hashedPassword = await bcrypt.hash(user_password, 10);
+        const hashedPassword = await bcrypt.hash(user_password, 10); // Hash the password
 
+        // Create a new user
         const newUser = new User({
             user_name,
             user_email: normalizedEmail,
@@ -28,8 +39,9 @@ exports.registerUser = async (req, res) => {
             user_role: 'user'
         });
 
-        await newUser.save();
+        await newUser.save(); // Save the new user to the database
 
+        // Send a response to the client
         res.status(201).json({
             message: 'Registration successful',
             user: {
@@ -39,44 +51,25 @@ exports.registerUser = async (req, res) => {
                 user_role: newUser.user_role
             }
         });
-    } catch (error) {
+    } catch (error) { // Catch any errors
         res.status(500).json({
             message: 'Server error during registration',
             error: error.message
         });
     }
 };
-// /**
-//  * @desc Create a new user
-//  * @route GET /api/users
-//  * @access Public
-//  */
-// exports.createUser = async (req, res) => {
 
-//     try {
-//         // Destructure user_name, user_email, user_password from req.body
-//         const { user_name, user_email, user_password } = req.body;
-//         // Hash the user_password using bcrypt
-//         const hashed_password = await bcrypt.hash(user_password, 10);
-//         // Create a new user
-//         const new_user = new User({
-//             user_name,
-//             user_email,
-//             user_password: hashed_password,
-//         });
-
-//         await new_user.save(); // Save the new user to the database
-//         // Send a response to the client
-//         res.status(201).json({
-//             message: 'User created successfully',
-//             new_user,
-//         });
-
-//     } catch (error) { // Catch any errors
-//         res.status(400).json({ error: error.message });
-//     }
-// };
-
+/**
+ * 
+ * @desc Login user
+ * @route POST /api/login
+ * @access Public
+ * @description This function handles user login. It checks if the user exists,
+ * compares the password, and sets the session variables.
+ * @param {*} req
+ * @param {*} res
+ * @return {Promise<void>}
+ */
 exports.loginUser = async (req, res) => {
     const { user_email, user_password } = req.body;
     try {
