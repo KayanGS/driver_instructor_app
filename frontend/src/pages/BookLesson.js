@@ -1,59 +1,76 @@
-import React, { useState } from 'react';
+//file: frontend/src/pages/BookLesson.js
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';  // Default styles
-import '../styles/BookLesson.css'; //custom styles
+import 'react-calendar/dist/Calendar.css';
+import '../styles/BookLesson.css';
 
-const lessonTypes = [
-  { id: 'single', label: 'Single Lesson', price: '50€', description: '60 minutes class.' },
-  { id: 'package6', label: '6-Lesson Package', price: '250€', description: '6×60 Minutes Classes.' },
-  { id: 'package12', label: '12-Lesson Package', price: '500€', description: '12 Mandatory 60 minutes EDT Lessons.' }
-];
-
-const timeSlots = ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 AM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM'];
+const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '14:00',
+  '15:00', '16:00', '17:00', '18:00'];
 
 const BookLesson = () => {
-  const [selectedType, setSelectedType] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
+  const navigate = useNavigate();
 
-  const handleContinue = () => {
-    if (!selectedType || !selectedDate || !selectedTime) {
-      alert('Please select lesson type, date, and time slot!');
-    } else {
-      alert(`Lesson booked!\nType: ${selectedType}\nDate: ${selectedDate.toDateString()}\nTime: ${selectedTime}`);
+  // 🚨 Redirect if not logged in
+  useEffect(() => {
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      alert('⚠️ Please login to book a lesson.');
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleContinue = async () => {
+    const userId = localStorage.getItem('userId');
+    const api = process.env.NODE_ENV === 'development'
+      ? 'http://localhost:5000/api'
+      : window.location.origin + '/api';
+
+    if (!userId || !selectedDate || !selectedTime) {
+      alert('Please select a date and time slot!');
+      return;
+    }
+
+    try {
+      const res = await fetch(`${api}/lessons`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          user: userId,
+          lesson_date: selectedDate.toISOString(),
+          lesson_time: selectedTime
+        })
+      });
+
+      const data = await res.json();
+      console.log('📦 Backend Response:', data);
+      alert(`❌ Error: ${data.message || data.errors?.[0]?.msg || 'Unknown error'}`);
+
+      if (res.ok) {
+        alert('✅ Lesson successfully booked!');
+      } else {
+        alert(`❌ Error: ${data.message || 'Unknown error'}`);
+      }
+    } catch (err) {
+      alert('❌ Failed to book lesson: ' + err.message);
     }
   };
 
+
+
   return (
     <div className="book-lesson-container">
-      
-      {/* Lesson Type Selector */}
-      <div className="selector-box">
-        <h3>Select Lesson Type</h3>
-        {lessonTypes.map(type => (
-          <div
-            key={type.id}
-            className="lesson-type-option"
-            onClick={() => setSelectedType(type.label)}
-            style={{ backgroundColor: selectedType === type.label ? '#bbb' : '#ccc' }}
-          >
-            <div>
-              <strong>{type.label}</strong>
-              <p>{type.description}</p>
-            </div>
-            <div>{type.price}</div>
-          </div>
-        ))}
-      </div>
-
       {/* Date Picker */}
       <div className="selector-box">
         <h3>Select Date</h3>
         <Calendar
           onChange={setSelectedDate}
           value={selectedDate}
-          minDate={new Date()}  // Disable past dates
-          tileDisabled={({ date, view }) => view === 'month' && (date.getDay() === 0)}  // Disable Sundays
+          minDate={new Date()}
+          tileDisabled={({ date, view }) => view === 'month' && (date.getDay() === 0)}
         />
       </div>
 

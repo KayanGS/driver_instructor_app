@@ -1,3 +1,4 @@
+//filepath: frontend/src/components/AuthForm.js
 import React, { useState } from 'react';
 
 const AuthForm = ({ isLogin }) => {

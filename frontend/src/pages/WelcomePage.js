@@ -1,25 +1,47 @@
 //filepath: frontend/src/pages/WelcomePage.js
 
 // ################################## IMPORTS ##################################
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/WelcomePage.css';
 // ################################ END IMPORTS ################################
 
 // ########################## WELCOME PAGE COMPONENT ##########################
 const WelcomePage = () => {
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
     return (
         <div className="welcome-container">
             <div className="welcome-text">
-                <h1>Welcome to KV1</h1>
-                <p>
-                    Your trusted partner for learning how to drive safely and confidently.
-                    Whether you’re a beginner or looking to refine your skills, we offer personalized lessons designed to fit your pace.
-                </p>
-                <button className="book-button">Book Your Lesson</button>
+                {user ? (
+                    <>
+                        <h1>Welcome, {user.user_name}!</h1>
+                        <p>You still have <strong>{user.user_tokens}</strong> token(s) to use.</p>
+                        <p>
+                            <Link to="/book-lesson" className="book-link">Book a lesson</Link> or{' '}
+                            <a href="#services" className="book-link">buy more</a> in our services section below.
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <h1>Welcome to KV1</h1>
+                        <p>
+                            Your trusted partner for learning how to drive safely and confidently.
+                            Whether you’re a beginner or looking to refine your skills, we offer personalized lessons designed to fit your pace.
+                        </p>
+                        <button className="book-button">Book Your Lesson</button>
+                    </>
+                )}
             </div>
 
-            <div className="services-section">
+            <div className="services-section" id="services">
                 <h2>Services</h2>
                 <div className="card-container">
                     <Link to="/purchase?package=individual" className="service-card">
@@ -44,6 +66,5 @@ const WelcomePage = () => {
         </div>
     );
 };
-
 
 export default WelcomePage;

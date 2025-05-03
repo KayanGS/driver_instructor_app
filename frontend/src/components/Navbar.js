@@ -8,6 +8,8 @@ import logo from '../assets/logo.png';
 const Navbar = () => {
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const user = JSON.parse(localStorage.getItem('user'));
+
 
     // Check login status on component mount
     useEffect(() => {
@@ -42,14 +44,18 @@ const Navbar = () => {
             </div>
             <ul className="nav-links">
                 <li><a href="/purchase">Lessons Packages</a></li>
-                <li><a href="/book-lesson">Book A Lesson</a></li>
+                {isAuthenticated && <li><a href="/book-lesson">Book A Lesson</a></li>}
                 <li><a href="/faq">FAQ and Contact</a></li>
+                {isAuthenticated && user?.user_role === 'admin' && (
+                    <li><a href="/admin/calendar">Admin Calendar</a></li>
+                )}
                 {!isAuthenticated ? (
                     <li><a href="/login">Login/Register</a></li>
                 ) : (
                     <li><button className="logout-btn" onClick={handleLogout}>Logout</button></li>
                 )}
             </ul>
+
         </nav>
     );
 };

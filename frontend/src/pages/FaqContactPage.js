@@ -1,3 +1,4 @@
+//filepath: frontend/src/pages/FaqContactPage.js
 import React, { useRef } from 'react';
 import emailjs from '@emailjs/browser';
 import '../styles/FaqContactPage.css';
@@ -10,18 +11,18 @@ const FaqContactPage = () => {
 
     emailjs.sendForm('service_s0z4nma', 'template_yhztzif', form.current, 'VOEjfLOyyqjmOvir6')
       .then((result) => {
-          console.log('Message Sent:', result.text);
-          alert("Message sent successfully!");
-          form.current.reset();
+        console.log('Message Sent:', result.text);
+        alert("Message sent successfully!");
+        form.current.reset();
       }, (error) => {
-          console.error('EmailJS Error:', error);   // 👈 This will show detailed info
-          alert("Failed to send message, please try again.");
+        console.error('EmailJS Error:', error);   // 👈 This will show detailed info
+        alert("Failed to send message, please try again.");
       });
   };
 
   return (
     <div className="faq-contact-container">
-      
+
       {/* FAQ Section */}
       <section className="faq-section">
         <h2 className="faq-title">Frequently Asked Questions</h2>
