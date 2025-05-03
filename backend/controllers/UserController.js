@@ -252,7 +252,7 @@ exports.buyTokens = async (req, res) => {
 
         res.status(200).json({// Send a response to the client
             message: `Successfully added ${tokens} token(s)`,
-            current_tokens: user.user_tokens
+            current_tokens: user.user_tokensnpm
         });
 
     } catch (error) { // Catch any errors

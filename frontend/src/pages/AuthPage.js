@@ -1,3 +1,4 @@
+//filepath: frontend/src/pages/AuthPage.js
 import React, { useState } from 'react';
 import AuthForm from '../components/AuthForm';
 import '../styles/Auth.css';

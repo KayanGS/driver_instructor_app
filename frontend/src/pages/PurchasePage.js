@@ -16,7 +16,7 @@ const PurchasePage = () => {
     const queryParams = new URLSearchParams(location.search);
     const selectedPackage = queryParams.get('package');
 
-    const [selected, setSelected] = useState(selectedPackage || 'individual');
+    const [selected, setSelected] = useState(selectedPackage || '');
     const userId = localStorage.getItem('userId');
     const api = process.env.NODE_ENV === 'development'
         ? 'http://localhost:5000/api'
@@ -48,41 +48,34 @@ const PurchasePage = () => {
         }
     };
 
+    const lessonTypes = [
+        { id: 'individual', label: 'Single Lesson', price: '50€', description: '60 minutes class.' },
+        { id: 'sixpack', label: '6-Lesson Package', price: '250€', description: '6×60 Minutes Classes.' },
+        { id: 'twelvepack', label: '12-Lesson Package', price: '500€', description: '12 Mandatory 60 minutes EDT Lessons.' }
+    ];
+
     return (
         <div className="purchase-container">
             <h2>Purchase Driving Lessons</h2>
 
-            <div className="radio-group">
-                <label>
-                    <input
-                        type="radio"
-                        name="package"
-                        value="individual"
-                        checked={selected === 'individual'}
-                        onChange={(e) => setSelected(e.target.value)}
-                    />
-                    1 Lesson (50€)
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="package"
-                        value="sixpack"
-                        checked={selected === 'sixpack'}
-                        onChange={(e) => setSelected(e.target.value)}
-                    />
-                    6 Lessons (250€)
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        name="package"
-                        value="twelvepack"
-                        checked={selected === 'twelvepack'}
-                        onChange={(e) => setSelected(e.target.value)}
-                    />
-                    12 Lessons (500€)
-                </label>
+            <div className="selector-box">
+                <h3>Select Lesson Package</h3>
+                {lessonTypes.map(type => (
+                    <div
+                        key={type.id}
+                        className={`lesson-type-option ${selected === type.id ? 'selected' : ''}`}
+                        onClick={() => setSelected(type.id)}
+                    >
+                        <div>
+                            <strong>{type.label}</strong>
+                            <p>{type.description}</p>
+                        </div>
+                        <div>{type.price}</div>
+                    </div>
+                ))}
+                {selected && (
+                    <p className="selected-note">Selected Package: <strong>{selected}</strong></p>
+                )}
             </div>
 
             <div className="bank-details">
