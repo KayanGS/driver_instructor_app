@@ -56,6 +56,7 @@ await sendEmail({
     to: 'kayanmiyazono@gmail.com',
     ...
 });
+```
 
 ## Project Structure
 ```
