@@ -18,7 +18,7 @@ connectDB(); // Connect to database
 const app = express(); // Initialize express
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use('/api/stripe', require('./routes/stripeWebhook'));
+
 
 app.use(sessionMiddleware);
 app.use(express.json()); // Parse JSON bodies
@@ -37,7 +37,6 @@ app.use(cors({
 
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
-app.use('/api/stripe', require('./routes/stripeRoutes'));
 
 
 // app.get('/', (req, res) => {

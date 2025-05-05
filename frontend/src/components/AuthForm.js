@@ -1,3 +1,4 @@
+//filepath: frontend/src/components/AuthForm.js
 import React, { useState } from 'react';
 
 const AuthForm = ({ isLogin }) => {
@@ -18,10 +19,9 @@ const AuthForm = ({ isLogin }) => {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const api = process.env.REACT_APP_API_URL; // ✅ use env variable
         const url = isLogin
-            ? `${api}/login`    // ✅ login endpoint
-            : `${api}/register`; // ✅ register endpoint
+            ? 'http://localhost:5000/api/login'
+            : 'http://localhost:5000/api/register';
 
         const payload = isLogin
             ? {
@@ -44,9 +44,10 @@ const AuthForm = ({ isLogin }) => {
                 setMessage(`✅ ${isLogin ? 'Login' : 'Registration'} successful!`);
 
                 if (isLogin) {
+                    // store session locally
                     localStorage.setItem('user', JSON.stringify(data.user));
                     localStorage.setItem('userId', data.user._id);
-                    window.location.href = '/';
+                    window.location.href = '/'; // redirect to home
                 }
             } else {
                 setMessage(`❌ ${data.message || 'Something went wrong'}`);

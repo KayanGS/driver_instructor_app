@@ -11,6 +11,8 @@ import BookLesson from './pages/BookLesson';
 import FaqContactPage from './pages/FaqContactPage';
 import AdminCalendar from './pages/AdminCalendar';
 import BookedLessonsPage from './pages/BookedLessonsPage';
+import ReschedulePage from './pages/ReschedulePage';
+
 function App() {
   //mock user ID
   //const currentUserId = '64b7f1a2c9d5e123456789ab';
@@ -28,6 +30,8 @@ function App() {
             <Route path="/book-lesson" element={<BookLesson />} />
             <Route path="/faq" element={<FaqContactPage />} />
             <Route path="/booked-lessons" element={<BookedLessonsPage />} />
+            <Route path="/reschedule/:id" element={<ReschedulePage />} />
+
 
             {/* Protected admin route */}
             <Route

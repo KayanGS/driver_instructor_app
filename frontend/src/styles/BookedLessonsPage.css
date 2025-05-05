@@ -20,12 +20,54 @@
 }
 
 .booked-lessons-list li {
-    background-color: #f2f8f5;
-    border: 1px solid #d0e6db;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.75rem;
-    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    flex-wrap: wrap;
+}
+
+.lesson-info {
+    flex: 1;
     color: #2f4f4f;
+    font-weight: 500;
+    margin-right: 12px;
+}
+
+.lesson-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.reschedule-btn,
+.delete-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: white;
+}
+
+.reschedule-btn {
+    background-color: #0059ff;
+}
+
+.reschedule-btn:hover {
+    background-color: #0041cc;
+}
+
+.delete-btn {
+    background-color: #ff4d4d;
+}
+
+.delete-btn:hover {
+    background-color: #e60000;
 }
 
 .book-again-btn {
