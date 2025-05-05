@@ -22,7 +22,7 @@ const router = express.Router();
 router.post(
     '/lessons',
     requestLimiter,
-    isAuthenticated,
+    // isAuthenticated,
     validateLessonForCreate,
     createLesson);
 

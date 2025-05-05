@@ -11,7 +11,7 @@
 // ################################## IMPORTS ##################################
 const Lesson = require('../models/Lesson'); // Importing the Lesson model
 const User = require('../models/User'); // Importing the User model
-
+const sendEmail = require('../utils/sendEmail');
 /**
  * @desc Create a new lesson (Booking lesson using tokens)
  * @route POST /api/lessons
@@ -21,7 +21,6 @@ exports.createLesson = async (req, res) => {
     try {
         const { user, lesson_date, lesson_time } = req.body;
 
-        // Check for conflicting lesson (same date + time + status = scheduled)
         const existing = await Lesson.findOne({
             lesson_date: new Date(lesson_date),
             lesson_time,
@@ -31,35 +30,79 @@ exports.createLesson = async (req, res) => {
         if (existing) {
             return res.status(409).json({
                 message: 'That time slot is already booked'
-            }); // ######## RETURN ########
+            });
         }
 
-        // Find the user
         const userDoc = await User.findById(user);
         if (!userDoc) {
-            return res.status(404).json({ message: 'User not found' }); // ######## RETURN ########
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check token balance
         if (userDoc.user_tokens <= 0) {
             return res.status(400).json({
                 message: 'Not enough tokens to book a lesson'
-            }); // ######## RETURN ########
+            });
         }
 
-        // Create the lesson
+        // Normalize date
+        const normalizedDate = new Date(lesson_date);
+        normalizedDate.setUTCHours(0, 0, 0, 0);
+
         const lesson = new Lesson({
             user,
-            lesson_date,
+            lesson_date: normalizedDate,
             lesson_time
         });
 
         await lesson.save();
 
-        // Update user
         userDoc.user_tokens -= 1;
         userDoc.lessons.push(lesson._id);
         await userDoc.save();
+
+        const logoUrl = 'https://raw.githubusercontent.com/KayanGS/driver_instructor_app/main/frontend/src/assets/logo.png';
+
+        const htmlUser = `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ccc;">
+            <img src="${logoUrl}" alt="KV1 Logo" style="width: 150px; margin-bottom: 20px;" />
+            <h2 style="color: #333;">Lesson Booking Confirmation</h2>
+            <p>Dear ${userDoc.user_name},</p>
+            <p>We are pleased to confirm your driving lesson booking with <strong>KV1 Driving School</strong>.</p>
+            <ul>
+              <li><strong>Date:</strong> ${normalizedDate.toDateString()}</li>
+              <li><strong>Time:</strong> ${lesson_time}</li>
+              <li><strong>Location:</strong> KV1 Driving School, Dublin</li>
+            </ul>
+            <p>Thank you for choosing us. Please arrive 10 minutes early and bring your learner permit.</p>
+            <br/>
+            <p style="font-size: 12px; color: #999;">This is an automated message. Please do not reply.</p>
+          </div>
+        `;
+
+        await sendEmail({
+            to: userDoc.user_email,
+            subject: '✅ Lesson Booking Confirmed - KV1 Driving School',
+            html: htmlUser
+        });
+
+        const htmlAdmin = `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ccc;">
+            <img src="${logoUrl}" alt="KV1 Logo" style="width: 150px; margin-bottom: 20px;" />
+            <h2 style="color: #b30000;">New Lesson Booked</h2>
+            <p><strong>${userDoc.user_name}</strong> has just booked a new lesson.</p>
+            <ul>
+              <li><strong>Date:</strong> ${normalizedDate.toDateString()}</li>
+              <li><strong>Time:</strong> ${lesson_time}</li>
+            </ul>
+            <p>Please update the admin calendar if needed.</p>
+          </div>
+        `;
+
+        await sendEmail({
+            to: 'kayanmiyazono@gmail.com',
+            subject: '📌 New Lesson Scheduled - Admin Notification',
+            html: htmlAdmin
+        });
 
         res.status(201).json(lesson);
     } catch (error) {
@@ -94,7 +137,11 @@ exports.getLessonByID = async (req, res) => {
  */
 exports.getAllLessons = async (req, res) => {
     try {
-        const lessons = req.filteredLessons;
+        const lessons = await Lesson.find({
+            _id: { $in: req.filteredLessons.map(l => l._id) }
+        }).populate('user', 'user_name');
+
+
 
         if (!Array.isArray(lessons)) {
             return res.status(500).json({ message: 'Lesson data is not an array.' });

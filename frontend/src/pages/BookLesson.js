@@ -47,15 +47,12 @@ const BookLesson = () => {
 
       const data = await res.json();
       console.log('📦 Backend Response:', data);
-      alert(`❌ Error: ${data.message || data.errors?.[0]?.msg || 'Unknown error'}`);
 
       if (res.ok) {
         alert('✅ Lesson successfully booked!');
       } else {
-        alert(`❌ Error: ${data.message || 'Unknown error'}`);
       }
     } catch (err) {
-      alert('❌ Failed to book lesson: ' + err.message);
     }
   };
 

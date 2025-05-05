@@ -11,7 +11,10 @@ const AdminCalendar = () => {
 
     // Fetch all scheduled lessons
     useEffect(() => {
-        fetch('http://localhost:5000/api/lessons')
+        fetch('http://localhost:5000/api/lessons', {
+            method: 'GET',
+            credentials: 'include', // REQUIRED for session to be sent
+        })
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {
@@ -26,14 +29,17 @@ const AdminCalendar = () => {
             .catch(err => console.error('Error fetching lessons:', err));
     }, []);
 
+
     // Handle clicking a day
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        const dateStr = new Date(date).toISOString().split('T')[0];
+        // Make another optionof dateStr that not en-IE but +00:00 GMT
+        const dateStr = date.toISOString().slice(0, 10);
         const filtered = allLessons.filter(lesson => {
-            const lessonDate = new Date(lesson.lesson_date).toISOString().split('T')[0];
+            const lessonDate = new Date(lesson.lesson_date).toISOString().slice(0, 10);
             return lessonDate === dateStr;
         });
+
 
         setDayLessons(filtered);
     };
@@ -41,10 +47,9 @@ const AdminCalendar = () => {
     // Customize calendar tiles with dots
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
-            const dateStr = date.toISOString().split('T')[0];
-            if (!Array.isArray(allLessons)) return null;
+            const dateStr = date.toISOString().slice(0, 10);
             const hasLesson = allLessons.some(l => {
-                const lessonDate = new Date(l.lesson_date).toISOString().split('T')[0];
+                const lessonDate = new Date(l.lesson_date).toISOString().slice(0, 10);
                 return lessonDate === dateStr;
             });
             return (
@@ -55,24 +60,30 @@ const AdminCalendar = () => {
     };
 
 
+
     const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '14:00',
         '15:00', '16:00', '17:00', '18:00'];
 
     const renderDailySlots = () => {
         return timeSlots.map(time => {
-            const lesson = dayLessons.find(lesson => lesson.lesson_time === time);
+            const lesson = dayLessons?.find(l => {
+                return l?.lesson_time && l.lesson_time.trim().slice(0, 5) === time;
+            });
+
             const isBooked = Boolean(lesson);
+            const displayName = isBooked ? lesson.user?.user_name || 'Unknown' : 'Free';
 
             return (
                 <div
                     key={time}
                     className={`time-slot ${isBooked ? 'booked' : 'available'}`}
                 >
-                    <strong>{time}</strong> {isBooked ? `- ${lesson.user?.user_name || 'Unknown'}` : ''}
+                    <strong>{time}</strong> {isBooked ? `- ${displayName}` : ''}
                 </div>
             );
         });
     };
+
 
     return (
         <div className="admin-calendar-container">
