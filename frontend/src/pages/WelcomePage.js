@@ -11,11 +11,33 @@ const WelcomePage = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        fetchUserData();
     }, []);
+
+    const fetchUserData = async () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        try {
+            const api = process.env.NODE_ENV === 'development'
+                ? 'http://localhost:5000/api'
+                : window.location.origin + '/api';
+
+            const res = await fetch(`${api}/users/${userId}`, {
+                method: 'GET',
+                credentials: 'include'
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                localStorage.setItem('user', JSON.stringify(data));
+                setUser(data);
+            }
+        } catch (err) {
+            console.error('Error fetching user data:', err);
+        }
+    };
+
 
     return (
         <div className="welcome-container">

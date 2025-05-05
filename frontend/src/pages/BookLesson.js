@@ -8,6 +8,19 @@ import '../styles/BookLesson.css';
 const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '14:00',
   '15:00', '16:00', '17:00', '18:00'];
 
+const isPastSlot = (date, time) => {
+  const [hours, minutes] = time.split(':').map(Number);
+  const slotDate = new Date(date);
+  slotDate.setHours(hours, minutes, 0, 0);
+
+  const now = new Date();
+  const irishNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Dublin' }));
+
+  const threeHoursLater = new Date(irishNow.getTime() + 3 * 60 * 60 * 1000);
+  return slotDate < threeHoursLater;
+};
+
+
 const BookLesson = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
@@ -44,13 +57,29 @@ const BookLesson = () => {
     }
   }, [navigate]);
 
+  const toIrishDateStr = (date) =>
+    new Date(date).toLocaleDateString('en-IE', { timeZone: 'Europe/Dublin' });
+
   const isFullyBooked = (date) => {
-    const dateStr = date.toISOString().split('T')[0];
+    const dateStr = toIrishDateStr(date);
     const bookingsForDay = bookedLessons.filter(lesson =>
-      new Date(lesson.lesson_date).toISOString().split('T')[0] === dateStr
+      toIrishDateStr(lesson.lesson_date) === dateStr
     );
     return bookingsForDay.length >= timeSlots.length;
   };
+
+  const isTimeSlotBooked = (time) => {
+    const selectedDateStr = toIrishDateStr(selectedDate);
+    const isInPast = isPastSlot(selectedDate, time);
+
+    const isBooked = bookedLessons.some(lesson =>
+      lesson.lesson_time === time &&
+      toIrishDateStr(lesson.lesson_date) === selectedDateStr
+    );
+
+    return isBooked || isInPast;
+  };
+
 
 
   const handleContinue = async () => {
@@ -63,7 +92,10 @@ const BookLesson = () => {
       alert('Please select a date and time slot!');
       return;
     }
-
+    if (isPastSlot(selectedDate, selectedTime)) {
+      alert('❌ You can only book lessons at least 3 hours in advance.');
+      return;
+    }
     try {
       const res = await fetch(`${api}/lessons`, {
         method: 'POST',
@@ -87,16 +119,6 @@ const BookLesson = () => {
     } catch (err) {
     }
   };
-
-  const selectedDateStr = selectedDate.toISOString().split('T')[0];
-
-  const isTimeSlotBooked = (time) => {
-    return bookedLessons.some(lesson =>
-      lesson.lesson_time === time &&
-      new Date(lesson.lesson_date).toISOString().split('T')[0] === selectedDateStr
-    );
-  };
-
 
   return (
     <div className="book-lesson-container">

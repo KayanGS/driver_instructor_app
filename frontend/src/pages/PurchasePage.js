@@ -1,16 +1,7 @@
-// filepath: frontend/src/pages/PurchasePage.js
-
-// ################################## IMPORTS ##################################
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import '../styles/PurchasePage.css';
-// ################################ END IMPORTS ###############################
 
-
-// ########################### PURCHASE PAGE COMPONENT #########################
-/**
- * @returns {JSX.Element} PurchasePage component 
- */
 const PurchasePage = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -25,29 +16,28 @@ const PurchasePage = () => {
     const [message, setMessage] = useState('');
 
     const handlePurchase = async () => {
-        if (!userId || !selected) {
-            setMessage('❌ Please log in and select a package.');
+        if (!userId) {
+            setMessage('❌ Please log in to purchase a package.');
             return;
         }
 
         try {
-            const res = await fetch(`${api}/stripe/create-checkout-session`, {
+            const res = await fetch(`${api}/users/${userId}/buy`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, packageType: selected })
+                credentials: 'include',
+                body: JSON.stringify({ package: selected })
             });
-
             const data = await res.json();
-            if (res.ok && data.url) {
-                window.location.href = data.url; // redirect to Stripe Checkout
+            if (res.ok) {
+                setMessage(`✅ ${data.message} (Now you have ${data.current_tokens} token(s))`);
             } else {
-                setMessage(`❌ Error: ${data.message}`);
+                setMessage(`❌ ${data.message}`);
             }
         } catch (err) {
-            setMessage('❌ Failed to start payment session');
+            setMessage('❌ Error purchasing package');
         }
     };
-
 
     const lessonTypes = [
         { id: 'individual', label: 'Single Lesson', price: '50€', description: '60 minutes class.' },
@@ -85,7 +75,7 @@ const PurchasePage = () => {
                 <p><strong>Account Name:</strong> KV1 Driving School</p>
                 <p><strong>IBAN:</strong> IE12ABCD34567890123456</p>
                 <p><strong>Reference:</strong> KV1 Account</p>
-                <p><em>Note: Payment processing is not yet implemented. This is a simulation.</em></p>
+                <p><em>Note: Payment processing is not implemented. Click Confirm to simulate the purchase.</em></p>
             </div>
 
             <button onClick={handlePurchase} className="purchase-button">Confirm Purchase</button>

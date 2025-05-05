@@ -1,30 +1,40 @@
-// filepath: /utils/sendEmail.js
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.SMTP_EMAIL,       // your Gmail
-        pass: process.env.SMTP_PASSWORD     // app password
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD
     }
 });
 
 /**
- * Sends an email with HTML formatting and optional fallback plain text.
+ * Sends an email with support for HTML + ICS calendar attachment.
  * @param {Object} options
- * @param {string|string[]} options.to - Recipient(s)
- * @param {string} options.subject - Email subject
- * @param {string} [options.text] - Plain text fallback
- * @param {string} options.html - HTML content of the email
+ * @param {string|string[]} options.to
+ * @param {string} options.subject
+ * @param {string} options.html
+ * @param {string} [options.text]
+ * @param {Object[]} [options.attachments]
  */
-const sendEmail = async ({ to, subject, html, text = '' }) => {
+const sendEmail = async ({ to, subject, html, text = '', attachments = [] }) => {
     const mailOptions = {
         from: `"KV1 Driving School" <${process.env.SMTP_EMAIL}>`,
         to,
         subject,
-        text,
+        text: text || 'This is a calendar invite from KV1 Driving School.',
         html,
-        headers: { 'Content-Type': 'text/html; charset=UTF-8' }
+        attachments: attachments.map(att => ({
+            ...att,
+            contentType: 'text/calendar',
+            contentDisposition: 'attachment'
+        })),
+        alternatives: [
+            {
+                contentType: 'text/calendar; method=REQUEST; charset=UTF-8',
+                content: attachments.length > 0 ? attachments[0].content : ''
+            }
+        ]
     };
 
     await transporter.sendMail(mailOptions);

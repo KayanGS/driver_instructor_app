@@ -1,4 +1,5 @@
 // filepath: frontend/src/pages/AdminCalendar.js
+
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -8,6 +9,9 @@ const AdminCalendar = () => {
     const [allLessons, setAllLessons] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [dayLessons, setDayLessons] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedLesson, setSelectedLesson] = useState(null);
+    const [newTime, setNewTime] = useState('');
 
     // Fetch all scheduled lessons
     useEffect(() => {
@@ -29,37 +33,28 @@ const AdminCalendar = () => {
             .catch(err => console.error('Error fetching lessons:', err));
     }, []);
 
+    const toIrishDateStr = (date) =>
+        new Date(date).toLocaleDateString('en-IE', { timeZone: 'Europe/Dublin' });
 
-    // Handle clicking a day
     const handleDateChange = (date) => {
         setSelectedDate(date);
-        // Make another optionof dateStr that not en-IE but +00:00 GMT
-        const dateStr = date.toISOString().slice(0, 10);
+        const dateStr = toIrishDateStr(date);
         const filtered = allLessons.filter(lesson => {
-            const lessonDate = new Date(lesson.lesson_date).toISOString().slice(0, 10);
-            return lessonDate === dateStr;
+            return toIrishDateStr(lesson.lesson_date) === dateStr;
         });
-
-
         setDayLessons(filtered);
     };
 
-    // Customize calendar tiles with dots
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
-            const dateStr = date.toISOString().slice(0, 10);
-            const hasLesson = allLessons.some(l => {
-                const lessonDate = new Date(l.lesson_date).toISOString().slice(0, 10);
-                return lessonDate === dateStr;
-            });
+            const dateStr = toIrishDateStr(date);
+            const hasLesson = allLessons.some(l => toIrishDateStr(l.lesson_date) === dateStr);
             return (
                 <div className="dot" style={{ backgroundColor: hasLesson ? 'red' : 'green' }}></div>
             );
         }
         return null;
     };
-
-
 
     const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '14:00',
         '15:00', '16:00', '17:00', '18:00'];
@@ -77,11 +72,70 @@ const AdminCalendar = () => {
                 <div
                     key={time}
                     className={`time-slot ${isBooked ? 'booked' : 'available'}`}
+                    onClick={() => {
+                        if (lesson) {
+                            setSelectedLesson(lesson);
+                            setShowModal(true);
+                        }
+                    }}
                 >
                     <strong>{time}</strong> {isBooked ? `- ${displayName}` : ''}
                 </div>
             );
         });
+    };
+
+    const handleReschedule = async () => {
+        if (!newTime) {
+            alert('Please select a new time.');
+            return;
+        }
+
+        try {
+            const res = await fetch(`http://localhost:5000/api/lessons/${selectedLesson._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    lesson_date: selectedLesson.lesson_date,
+                    lesson_time: newTime
+                })
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                alert('✅ Lesson rescheduled!');
+                setShowModal(false);
+                setSelectedLesson(null);
+                window.location.reload(); // Refresh the calendar
+            } else {
+                alert('❌ ' + data.message);
+            }
+        } catch (err) {
+            alert('❌ Error: ' + err.message);
+        }
+    };
+    const handleDelete = async () => {
+        if (!window.confirm('Are you sure you want to delete this lesson?')) return;
+
+        try {
+            const res = await fetch(`http://localhost:5000/api/lessons/${selectedLesson._id}`, {
+                method: 'DELETE',
+                credentials: 'include'
+            });
+
+            if (res.ok) {
+                alert('🗑️ Lesson deleted successfully!');
+                setShowModal(false);
+                setSelectedLesson(null);
+                window.location.reload();
+            } else {
+                const data = await res.json();
+                alert('❌ ' + data.message);
+            }
+        } catch (err) {
+            alert('❌ Network error: ' + err.message);
+        }
     };
 
 
@@ -98,6 +152,34 @@ const AdminCalendar = () => {
                 <h3>Scheduled Lessons for {selectedDate.toDateString()}</h3>
                 {renderDailySlots()}
             </div>
+
+            {showModal && selectedLesson && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Manage Lesson</h3>
+                        <p><strong>User:</strong> {selectedLesson.user?.user_name}</p>
+                        <p><strong>Current Time:</strong> {selectedLesson.lesson_time}</p>
+
+                        <label htmlFor="new-time">New Time:</label>
+                        <select
+                            id="new-time"
+                            value={newTime}
+                            onChange={(e) => setNewTime(e.target.value)}
+                        >
+                            <option value="">-- Select New Time --</option>
+                            {timeSlots.map((slot) => (
+                                <option key={slot} value={slot}>{slot}</option>
+                            ))}
+                        </select>
+
+                        <div className="modal-actions">
+                            <button onClick={handleReschedule}>✅ Reschedule</button>
+                            <button onClick={handleDelete}>🗑️ Delete</button>
+                            <button onClick={() => setShowModal(false)}>❌ Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
