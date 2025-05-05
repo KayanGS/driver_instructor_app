@@ -25,28 +25,29 @@ const PurchasePage = () => {
     const [message, setMessage] = useState('');
 
     const handlePurchase = async () => {
-        if (!userId) {
-            setMessage('❌ Please log in to purchase a package.');
+        if (!userId || !selected) {
+            setMessage('❌ Please log in and select a package.');
             return;
         }
 
         try {
-            const res = await fetch(`${api}/users/${userId}/buy`, {
+            const res = await fetch(`${api}/stripe/create-checkout-session`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify({ package: selected })
+                body: JSON.stringify({ userId, packageType: selected })
             });
+
             const data = await res.json();
-            if (res.ok) {
-                setMessage(`✅ ${data.message} (Now you have ${data.current_tokens} token(s))`);
+            if (res.ok && data.url) {
+                window.location.href = data.url; // redirect to Stripe Checkout
             } else {
-                setMessage(`❌ ${data.message}`);
+                setMessage(`❌ Error: ${data.message}`);
             }
         } catch (err) {
-            setMessage('❌ Error purchasing package');
+            setMessage('❌ Failed to start payment session');
         }
     };
+
 
     const lessonTypes = [
         { id: 'individual', label: 'Single Lesson', price: '50€', description: '60 minutes class.' },
