@@ -113,3 +113,10 @@
     background: black;
     color: white;
 }
+
+.time-slot.disabled {
+    background-color: #ddd;
+    color: #999;
+    pointer-events: none;
+    cursor: not-allowed;
+}
