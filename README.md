@@ -25,6 +25,38 @@ A web application for managing driving lessons, time slots, and purchases. Built
    npm install
    ```
 
+## Tips for Using the Website
+
+### ✉️ Email Notifications for Bookings
+
+This app sends email confirmations when a lesson is booked:
+- ✅ To the **user** who booked the lesson (includes date, time, and location).
+- ✅ To the **admin** with the name of the user and the scheduled time.
+
+To enable and customize the email feature:
+
+#### 1. Add Email Credentials to `.env`
+You must configure your `.env` file with the following variables:
+   ```bash
+   SMTP_EMAIL=your_gmail_address@gmail.com
+   SMTP_PASSWORD=your_gmail_app_password
+   ```
+
+> 🔐 **Important:** This is not your Gmail login password. You need to create an [App Password](https://support.google.com/accounts/answer/185833?hl=en) from your Google account.
+
+#### 2. Update the Admin Email
+By default, booking notifications are sent to: kayanmiyazono@gmail.com
+
+
+To change this, open the file: /controllers/LessonController.js
+
+Look for:
+```js
+await sendEmail({
+    to: 'kayanmiyazono@gmail.com',
+    ...
+});
+
 ## Project Structure
 ```
 📂 driver_instructor_app/
@@ -47,6 +79,8 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   ├── 📂 routes/                  # Express routes (users, lessons, purchases, TimeSlot)
 │   │    ├── lesson_routes.js   
 │   │    └── user_routes.js
+│   ├── 📂 utils/                  # Utils
+│   │    ├── sendEmail.js  
 │   ├── 📂 validation/              # Server-side validation
 │   │    ├── lessonValidation.js
 │   │    └── userValidation.js
@@ -63,12 +97,14 @@ A web application for managing driving lessons, time slots, and purchases. Built
 │   │    │    ├── Footer.js
 │   │    │    └── Navbar.js
 │   │    ├── 📂 pages/
+│   │    │    ├── AdminCalendar.js
 │   │    │    ├── AuthPage.js
 │   │    │    ├── BookLesson.js
 │   │    │    ├── FaqContactPage.js
 │   │    │    ├── PurchasePage.js
 │   │    │    └── WelcomePage.js
 │   │    └── 📂 styles/
+│   │    │    ├── AdminCalendar.css
 │   │    │    ├── Auth.css
 │   │    │    ├── BookLesson.css
 │   │    │    ├── FaqContactPage.css
