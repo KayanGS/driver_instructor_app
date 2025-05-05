@@ -12,15 +12,46 @@ const BookLesson = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
   const navigate = useNavigate();
+  const [bookedLessons, setBookedLessons] = useState([]);
+
 
   // 🚨 Redirect if not logged in
   useEffect(() => {
+    const fetchLessons = async () => {
+      const api = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5000/api'
+        : window.location.origin + '/api';
+
+      try {
+        const res = await fetch(`${api}/lessons`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+
+        const data = await res.json();
+        if (Array.isArray(data)) setBookedLessons(data);
+      } catch (err) {
+        console.error('Failed to fetch lessons:', err);
+      }
+    };
+
     const userId = localStorage.getItem('userId');
     if (!userId) {
       alert('⚠️ Please login to book a lesson.');
       navigate('/login');
+    } else {
+      fetchLessons();
     }
   }, [navigate]);
+
+  const isFullyBooked = (date) => {
+    const dateStr = date.toISOString().split('T')[0];
+    const bookingsForDay = bookedLessons.filter(lesson =>
+      new Date(lesson.lesson_date).toISOString().split('T')[0] === dateStr
+    );
+    return bookingsForDay.length >= timeSlots.length;
+  };
+
 
   const handleContinue = async () => {
     const userId = localStorage.getItem('userId');
@@ -50,12 +81,21 @@ const BookLesson = () => {
 
       if (res.ok) {
         alert('✅ Lesson successfully booked!');
-      } else {
+        navigate('/booked-lessons'); // 👈 redirect to new page
       }
+
     } catch (err) {
     }
   };
 
+  const selectedDateStr = selectedDate.toISOString().split('T')[0];
+
+  const isTimeSlotBooked = (time) => {
+    return bookedLessons.some(lesson =>
+      lesson.lesson_time === time &&
+      new Date(lesson.lesson_date).toISOString().split('T')[0] === selectedDateStr
+    );
+  };
 
 
   return (
@@ -67,7 +107,12 @@ const BookLesson = () => {
           onChange={setSelectedDate}
           value={selectedDate}
           minDate={new Date()}
-          tileDisabled={({ date, view }) => view === 'month' && (date.getDay() === 0)}
+          tileDisabled={({ date, view }) => {
+            if (view !== 'month') return false;
+            const isSunday = date.getDay() === 0;
+            return isSunday || isFullyBooked(date);
+          }}
+
         />
       </div>
 
@@ -75,15 +120,20 @@ const BookLesson = () => {
       <div className="selector-box">
         <h3>Select Time</h3>
         <div className="time-slots">
-          {timeSlots.map(time => (
-            <div
-              key={time}
-              className={`time-slot ${selectedTime === time ? 'selected' : ''}`}
-              onClick={() => setSelectedTime(time)}
-            >
-              {time}
-            </div>
-          ))}
+          {timeSlots.map(time => {
+            const disabled = isTimeSlotBooked(time);
+            return (
+              <div
+                key={time}
+                className={`time-slot ${selectedTime === time ? 'selected' : ''} 
+                ${disabled ? 'disabled' : ''}`}
+                onClick={() => !disabled && setSelectedTime(time)}
+              >
+                {time}
+              </div>
+            );
+          })}
+
         </div>
       </div>
 

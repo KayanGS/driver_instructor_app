@@ -10,9 +10,10 @@ import PurchasePage from './pages/PurchasePage';
 import BookLesson from './pages/BookLesson';
 import FaqContactPage from './pages/FaqContactPage';
 import AdminCalendar from './pages/AdminCalendar';
+import BookedLessonsPage from './pages/BookedLessonsPage';
 function App() {
   //mock user ID
-  const currentUserId = '64b7f1a2c9d5e123456789ab';
+  //const currentUserId = '64b7f1a2c9d5e123456789ab';
   const user = JSON.parse(localStorage.getItem('user'));
   const isAdmin = user?.user_role === 'admin';
   return (
@@ -26,6 +27,7 @@ function App() {
             <Route path="/purchase" element={<PurchasePage />} />
             <Route path="/book-lesson" element={<BookLesson />} />
             <Route path="/faq" element={<FaqContactPage />} />
+            <Route path="/booked-lessons" element={<BookedLessonsPage />} />
 
             {/* Protected admin route */}
             <Route
