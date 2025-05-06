@@ -52,6 +52,6 @@ router.put( // Update user
 
 //Private Routes
 router.get('/users', isAdmin, requestLimiter, isAuthenticated, getAllUsers); // Get all users
-router.get('/users/:id', isAdmin, requestLimiter, isAuthenticated, getUserByID); // Get user by ID
+router.get('/users/:id', isUserOwnerOrAdmin, requestLimiter, isAuthenticated, getUserByID); // Get user by ID
 
 module.exports = router;
