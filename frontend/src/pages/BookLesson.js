@@ -31,10 +31,8 @@ const BookLesson = () => {
   // 🚨 Redirect if not logged in
   useEffect(() => {
     const fetchLessons = async () => {
-      const api = process.env.NODE_ENV === 'development'
-        ? 'http://localhost:5000/api'
-        : window.location.origin + '/api';
-
+      const api = 'https://driver-instructor-app-backend.onrender.com/api';
+      
       try {
         const res = await fetch(`${api}/lessons`, {
           method: 'GET',
@@ -84,9 +82,7 @@ const BookLesson = () => {
 
   const handleContinue = async () => {
     const userId = localStorage.getItem('userId');
-    const api = process.env.NODE_ENV === 'development'
-      ? 'http://localhost:5000/api'
-      : window.location.origin + '/api';
+    const api = 'https://driver-instructor-app-backend.onrender.com';
 
     if (!userId || !selectedDate || !selectedTime) {
       alert('Please select a date and time slot!');
