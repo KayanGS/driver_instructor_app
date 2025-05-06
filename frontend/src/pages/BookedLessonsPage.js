@@ -9,10 +9,7 @@ const BookedLessonsPage = () => {
 
     useEffect(() => {
         const fetchLessons = async () => {
-            const api = process.env.NODE_ENV === 'development'
-                ? 'http://localhost:5000/api'
-                : window.location.origin + '/api';
-
+      const api = 'https://driver-instructor-app-backend.onrender.com/api';
             try {
                 const res = await fetch(`${api}/lessons`, {
                     method: 'GET',
@@ -45,9 +42,7 @@ const BookedLessonsPage = () => {
         }
 
         try {
-            const api = process.env.NODE_ENV === 'development'
-                ? 'http://localhost:5000/api'
-                : window.location.origin + '/api';
+            const api = 'https://driver-instructor-app-backend.onrender.com/api';
 
             const res = await fetch(`${api}/lessons/${lessonId}`, {
                 method: 'DELETE',
