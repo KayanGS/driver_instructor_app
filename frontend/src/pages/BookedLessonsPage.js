@@ -9,7 +9,7 @@ const BookedLessonsPage = () => {
 
     useEffect(() => {
         const fetchLessons = async () => {
-      const api = 'https://driver-instructor-app-backend.onrender.com/api';
+        const api = 'https://driver-instructor-app-backend.onrender.com/api';
             try {
                 const res = await fetch(`${api}/lessons`, {
                     method: 'GET',
