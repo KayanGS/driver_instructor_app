@@ -21,12 +21,22 @@ app.use(express.json()); // Parse JSON bodies
 
 const userRoutes = require('./routes/user_routes'); // Import user routes 
 const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
+
+app.use(cors({
+    origin: [
+        'https://driver-instructor-app.vercel.app', // ✅ Vercel frontend
+        'http://localhost:3000'                     // ✅ Local dev
+    ],
+    credentials: true
+}));
+
+// Allow preflight requests
 app.options('*', cors({
-  origin: [
-    'https://driver-instructor-app.vercel.app',
-    'http://localhost:3000'
-  ],
-  credentials: true
+    origin: [
+        'https://driver-instructor-app.vercel.app',
+        'http://localhost:3000'
+    ],
+    credentials: true
 }));
 
 
