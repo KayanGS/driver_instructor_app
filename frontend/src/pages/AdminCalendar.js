@@ -15,7 +15,7 @@ const AdminCalendar = () => {
 
     // Fetch all scheduled lessons
     useEffect(() => {
-        fetch('http://localhost:5000/api/lessons', {
+        fetch('https://driver-instructor-app-backend.onrender.com/api/lessons', {
             method: 'GET',
             credentials: 'include', // REQUIRED for session to be sent
         })
@@ -92,7 +92,7 @@ const AdminCalendar = () => {
         }
 
         try {
-            const res = await fetch(`http://localhost:5000/api/lessons/${selectedLesson._id}`, {
+            const res = await fetch(`https://driver-instructor-app-backend.onrender.com/api/lessons/${selectedLesson._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -119,7 +119,7 @@ const AdminCalendar = () => {
         if (!window.confirm('Are you sure you want to delete this lesson?')) return;
 
         try {
-            const res = await fetch(`http://localhost:5000/api/lessons/${selectedLesson._id}`, {
+            const res = await fetch(`https://driver-instructor-app-backend.onrender.com/api/lessons/${selectedLesson._id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
