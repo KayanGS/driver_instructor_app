@@ -1,4 +1,3 @@
-//filepath: frontend/src/components/AuthForm.js
 import React, { useState } from 'react';
 
 const AuthForm = ({ isLogin }) => {
@@ -8,6 +7,10 @@ const AuthForm = ({ isLogin }) => {
         user_password: ''
     });
     const [message, setMessage] = useState('');
+
+    const api = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:5000/api'
+        : window.location.origin + '/api';
 
     const handleChange = e => {
         setFormData(prev => ({
@@ -19,9 +22,7 @@ const AuthForm = ({ isLogin }) => {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const url = isLogin
-            ? 'http://localhost:5000/api/login'
-            : 'http://localhost:5000/api/register';
+        const url = isLogin ? `${api}/login` : `${api}/register`;
 
         const payload = isLogin
             ? {
