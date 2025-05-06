@@ -19,9 +19,7 @@ const WelcomePage = () => {
         if (!userId) return;
 
         try {
-            const api = process.env.NODE_ENV === 'development'
-                ? 'http://localhost:5000/api'
-                : 'https://driver-instructor-app-backend.onrender.com/api';
+            const api = 'https://driver-instructor-app-backend.onrender.com/api';
 
             const res = await fetch(`${api}/users/${userId}`, {
                 method: 'GET',
