@@ -27,7 +27,7 @@ const userRoutes = require('./routes/user_routes'); // Import user routes
 const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
 app.use(cors({
     origin: [
-        'https://driver-instructor-app-frontend.onrender.com', // ✅ Replace with your actual Vercel frontend URL
+        'https://driver-instructor-app.vercel.app/', 
         'http://localhost:3000' // optional for local dev
     ],
     credentials: true
