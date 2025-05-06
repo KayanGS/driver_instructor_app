@@ -8,13 +8,8 @@ const AuthForm = ({ isLogin }) => {
     });
     const [message, setMessage] = useState('');
 
-const isLocalhost = window.location.hostname === 'localhost';
-
-const api = isLocalhost
-    ? 'http://localhost:5000/api'
-    : 'https://driver-instructor-app-backend.onrender.com/api';
-
-
+const api = 'https://driver-instructor-app-backend.onrender.com/api';
+    
     const handleChange = e => {
         setFormData(prev => ({
             ...prev,
