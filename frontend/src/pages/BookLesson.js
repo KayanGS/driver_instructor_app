@@ -82,7 +82,7 @@ const BookLesson = () => {
 
   const handleContinue = async () => {
     const userId = localStorage.getItem('userId');
-    const api = 'https://driver-instructor-app-backend.onrender.com';
+      const api = 'https://driver-instructor-app-backend.onrender.com/api';
 
     if (!userId || !selectedDate || !selectedTime) {
       alert('Please select a date and time slot!');
