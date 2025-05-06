@@ -13,6 +13,7 @@ connectDB(); // Connect to database
 
 //Middleware
 const app = express(); // Initialize express
+app.set('trust proxy', 1); // Trust the Render proxy
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
@@ -24,8 +25,8 @@ const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
 
 app.use(cors({
     origin: [
-        'https://driver-instructor-app.vercel.app', // ✅ Vercel frontend
-        'http://localhost:3000'                     // ✅ Local dev
+        'https://driver-instructor-app.vercel.app', // Vercel frontend
+        'http://localhost:3000'                     // Local dev
     ],
     credentials: true
 }));
