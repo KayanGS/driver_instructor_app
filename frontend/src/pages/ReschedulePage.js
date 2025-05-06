@@ -13,7 +13,7 @@ const ReschedulePage = () => {
     const [bookedLessons, setBookedLessons] = useState([]);
     const navigate = useNavigate();
 
-    const api = 'http://localhost:5000/api'
+    const api = 'https://driver-instructor-app-backend.onrender.com/api';
 
 
     useEffect(() => {
