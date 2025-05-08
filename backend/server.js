@@ -45,6 +45,11 @@ app.options('*', cors({
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
 
+// Serve test UI at root
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
