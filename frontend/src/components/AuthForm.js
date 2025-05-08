@@ -8,8 +8,12 @@ const AuthForm = ({ isLogin }) => {
     });
     const [message, setMessage] = useState('');
 
-const api = 'https://driver-instructor-app-backend.onrender.com/api';
-    
+    const api =
+        window.location.hostname === 'localhost'
+            ? 'http://localhost:5000/api'
+            : 'https://driver-instructor-app-backend.onrender.com/api';
+
+
     const handleChange = e => {
         setFormData(prev => ({
             ...prev,
@@ -40,7 +44,9 @@ const api = 'https://driver-instructor-app-backend.onrender.com/api';
             const data = await res.json();
 
             if (res.ok) {
-                setMessage(`✅ ${isLogin ? 'Login' : 'Registration'} successful!`);
+                setMessage(
+                    `${isLogin ? 'Login' : 'Registration'} successful!`
+                );
 
                 if (isLogin) {
                     // store session locally
@@ -57,7 +63,11 @@ const api = 'https://driver-instructor-app-backend.onrender.com/api';
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '0 auto' }}>
+
+        <form onSubmit={handleSubmit} style={
+            { maxWidth: 400, margin: '0 auto' }
+        }>
+
             {!isLogin && (
                 <div>
                     <label>Name</label>

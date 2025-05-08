@@ -9,7 +9,10 @@ const PurchasePage = () => {
 
     const [selected, setSelected] = useState(selectedPackage || '');
     const userId = localStorage.getItem('userId');
-      const api = 'https://driver-instructor-app-backend.onrender.com/api';
+    const api =
+        window.location.hostname === 'localhost'
+            ? 'http://localhost:5000/api'
+            : 'https://driver-instructor-app-backend.onrender.com/api';
 
     const [message, setMessage] = useState('');
 

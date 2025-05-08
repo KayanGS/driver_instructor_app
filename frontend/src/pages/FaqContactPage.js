@@ -15,7 +15,7 @@ const FaqContactPage = () => {
         alert("Message sent successfully!");
         form.current.reset();
       }, (error) => {
-        console.error('EmailJS Error:', error);   // 👈 This will show detailed info
+        console.error('EmailJS Error:', error);
         alert("Failed to send message, please try again.");
       });
   };

@@ -197,11 +197,11 @@ exports.getAllLessons = async (req, res) => {
 
         const formattedLessons = lessons.map(lesson => ({
             ...lesson,
-            lesson_date: moment(lesson.lesson_date).tz('Europe/Dublin').format(), // 🕒 Ensure Irish time
+            lesson_date: moment(lesson.lesson_date).tz('Europe/Dublin').format(),
         }));
 
         console.log('📥 getAllLessons called. Lessons received:', formattedLessons.length);
-        return res.status(200).json(formattedLessons); // ✅ ONLY ONE RESPONSE
+        return res.status(200).json(formattedLessons);
     } catch (error) {
         console.error('❌ Error in getAllLessons:', error);
         return res.status(500).json({

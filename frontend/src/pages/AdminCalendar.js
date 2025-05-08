@@ -15,9 +15,14 @@ const AdminCalendar = () => {
 
     // Fetch all scheduled lessons
     useEffect(() => {
-        fetch('https://driver-instructor-app-backend.onrender.com/api/lessons', {
+        const api =
+            window.location.hostname === 'localhost'
+                ? 'http://localhost:5000/api'
+                : 'https://driver-instructor-app-backend.onrender.com/api';
+
+        fetch(`${api}/lessons`, {
             method: 'GET',
-            credentials: 'include', // REQUIRED for session to be sent
+            credentials: 'include',
         })
             .then(res => res.json())
             .then(data => {
@@ -34,7 +39,9 @@ const AdminCalendar = () => {
     }, []);
 
     const toIrishDateStr = (date) =>
-        new Date(date).toLocaleDateString('en-IE', { timeZone: 'Europe/Dublin' });
+        new Date(date).toLocaleDateString('en-IE', {
+            timeZone: 'Europe/Dublin'
+        });
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -48,9 +55,12 @@ const AdminCalendar = () => {
     const tileContent = ({ date, view }) => {
         if (view === 'month') {
             const dateStr = toIrishDateStr(date);
-            const hasLesson = allLessons.some(l => toIrishDateStr(l.lesson_date) === dateStr);
+            const hasLesson = allLessons.some(l =>
+                toIrishDateStr(l.lesson_date) === dateStr);
             return (
-                <div className="dot" style={{ backgroundColor: hasLesson ? 'red' : 'green' }}></div>
+                <div className="dot" style={{
+                    backgroundColor: hasLesson ? 'red' : 'green'
+                }}></div>
             );
         }
         return null;
@@ -61,12 +71,17 @@ const AdminCalendar = () => {
 
     const renderDailySlots = () => {
         return timeSlots.map(time => {
+
             const lesson = dayLessons?.find(l => {
-                return l?.lesson_time && l.lesson_time.trim().slice(0, 5) === time;
+                return l?.lesson_time
+                    && l.lesson_time.trim().slice(0, 5) === time;
             });
 
             const isBooked = Boolean(lesson);
-            const displayName = isBooked ? lesson.user?.user_name || 'Unknown' : 'Free';
+            const displayName = isBooked
+                ? lesson.user?.user_name
+                || 'Unknown'
+                : 'Free';
 
             return (
                 <div
@@ -92,7 +107,13 @@ const AdminCalendar = () => {
         }
 
         try {
-            const res = await fetch(`https://driver-instructor-app-backend.onrender.com/api/lessons/${selectedLesson._id}`, {
+
+            const api =
+                window.location.hostname === 'localhost'
+                    ? 'http://localhost:5000/api'
+                    : 'https://driver-instructor-app-backend.onrender.com/api';
+
+            const res = await fetch(`${api}/lessons/${selectedLesson._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -116,10 +137,17 @@ const AdminCalendar = () => {
         }
     };
     const handleDelete = async () => {
+
         if (!window.confirm('Are you sure you want to delete this lesson?')) return;
 
         try {
-            const res = await fetch(`https://driver-instructor-app-backend.onrender.com/api/lessons/${selectedLesson._id}`, {
+
+            const api =
+                window.location.hostname === 'localhost'
+                    ? 'http://localhost:5000/api'
+                    : 'https://driver-instructor-app-backend.onrender.com/api';
+
+            const res = await fetch(`${api}/lessons/${selectedLesson._id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
@@ -157,8 +185,14 @@ const AdminCalendar = () => {
                 <div className="modal-overlay">
                     <div className="modal-content">
                         <h3>Manage Lesson</h3>
-                        <p><strong>User:</strong> {selectedLesson.user?.user_name}</p>
-                        <p><strong>Current Time:</strong> {selectedLesson.lesson_time}</p>
+
+                        <p><strong>User:</strong> {
+                            selectedLesson.user?.user_name
+                        }</p>
+
+                        <p><strong>Current Time:</strong> {
+                            selectedLesson.lesson_time
+                        }</p>
 
                         <label htmlFor="new-time">New Time:</label>
                         <select
@@ -173,9 +207,17 @@ const AdminCalendar = () => {
                         </select>
 
                         <div className="modal-actions">
-                            <button onClick={handleReschedule}>✅ Reschedule</button>
+
+                            <button onClick={handleReschedule}>
+                                ✅ Reschedule
+                            </button>
+
                             <button onClick={handleDelete}>🗑️ Delete</button>
-                            <button onClick={() => setShowModal(false)}>❌ Cancel</button>
+
+                            <button onClick={() => setShowModal(false)}>
+                                ❌ Cancel
+                            </button>
+
                         </div>
                     </div>
                 </div>

@@ -31,8 +31,11 @@ const BookLesson = () => {
   // 🚨 Redirect if not logged in
   useEffect(() => {
     const fetchLessons = async () => {
-      const api = 'https://driver-instructor-app-backend.onrender.com/api';
-      
+      const api =
+        window.location.hostname === 'localhost'
+          ? 'http://localhost:5000/api'
+          : 'https://driver-instructor-app-backend.onrender.com/api';
+
       try {
         const res = await fetch(`${api}/lessons`, {
           method: 'GET',
@@ -82,7 +85,10 @@ const BookLesson = () => {
 
   const handleContinue = async () => {
     const userId = localStorage.getItem('userId');
-      const api = 'https://driver-instructor-app-backend.onrender.com/api';
+    const api =
+      window.location.hostname === 'localhost'
+        ? 'http://localhost:5000/api'
+        : 'https://driver-instructor-app-backend.onrender.com/api';
 
     if (!userId || !selectedDate || !selectedTime) {
       alert('Please select a date and time slot!');
@@ -109,7 +115,7 @@ const BookLesson = () => {
 
       if (res.ok) {
         alert('✅ Lesson successfully booked!');
-        navigate('/booked-lessons'); // 👈 redirect to new page
+        navigate('/booked-lessons'); // redirect to new page
       }
 
     } catch (err) {
