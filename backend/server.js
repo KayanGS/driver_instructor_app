@@ -10,18 +10,7 @@ const cors = require('cors');
 const path = require('path');
 
 connectDB(); // Connect to database
-
-//Middleware
 const app = express(); // Initialize express
-app.set('trust proxy', 1); // Trust the Render proxy
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
-app.use(sessionMiddleware);
-app.use(express.json()); // Parse JSON bodies
-
-const userRoutes = require('./routes/user_routes'); // Import user routes 
-const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
 
 app.use(cors({
     origin: [
@@ -40,8 +29,16 @@ app.options('*', cors({
     credentials: true
 }));
 
+app.use(sessionMiddleware);
+app.use(express.json()); // Parse JSON bodies
 
-// Middleware   
+app.set('trust proxy', 1); // Trust the Render proxy
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+const userRoutes = require('./routes/user_routes'); // Import user routes 
+const lessonRoutes = require('./routes/lesson_routes');// Import lesson routes
+
 app.use('/api', userRoutes); // Use user routes
 app.use('/api', lessonRoutes); // Use lesson routes
 

@@ -14,7 +14,12 @@ const AuthPage = () => {
                 <h2>{isLogin ? 'Login' : 'Register'}</h2>
                 <AuthForm isLogin={isLogin} />
                 <p>
-                    {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
+
+                    {isLogin
+                        ? "Don't have an account?"
+                        : 'Already have an account?'
+                    }{' '}
+
                     <button onClick={() => setIsLogin(!isLogin)}>
                         {isLogin ? 'Register' : 'Login'}
                     </button>

@@ -17,7 +17,13 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         try {
-            const res = await fetch('https://driver-instructor-app-backend.onrender.com/api/logout', {
+
+            const api =
+                window.location.hostname === 'localhost'
+                    ? 'http://localhost:5000/api'
+                    : 'https://driver-instructor-app-backend.onrender.com/api';
+
+            const res = await fetch(`${api}/logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -42,8 +48,19 @@ const Navbar = () => {
             </div>
             <ul className="nav-links">
                 <li><a href="/purchase">Lessons Packages</a></li>
-                {isAuthenticated && <li><a href="/book-lesson">Book A Lesson</a></li>}
-                {isAuthenticated && <li><a href="/booked-lessons">Booked Lessons</a></li>}
+
+                {
+                    isAuthenticated &&
+                    <li><a href="/book-lesson">Book A Lesson</a>
+                    </li>
+                }
+
+                {
+                    isAuthenticated &&
+                    <li><a href="/booked-lessons">Booked Lessons</a>
+                    </li>
+                }
+
                 <li><a href="/faq">FAQ and Contact</a></li>
                 {isAuthenticated && user?.user_role === 'admin' && (
                     <li><a href="/admin/calendar">Admin Calendar</a></li>
@@ -51,7 +68,15 @@ const Navbar = () => {
                 {!isAuthenticated ? (
                     <li><a href="/login">Login/Register</a></li>
                 ) : (
-                    <li><button className="logout-btn" onClick={handleLogout}>Logout</button></li>
+
+                    <li>
+                        <button
+                            className="logout-btn"
+                            onClick={handleLogout}>
+                            Logout
+                        </button>
+                    </li>
+
                 )}
             </ul>
         </nav>

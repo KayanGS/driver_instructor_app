@@ -12,11 +12,12 @@ const ReschedulePage = () => {
     const [selectedTime, setSelectedTime] = useState('');
     const [bookedLessons, setBookedLessons] = useState([]);
     const navigate = useNavigate();
-
-    const api = 'https://driver-instructor-app-backend.onrender.com/api';
-
-
+    const api =
+        window.location.hostname === 'localhost'
+            ? 'http://localhost:5000/api'
+            : 'https://driver-instructor-app-backend.onrender.com/api';
     useEffect(() => {
+
         const fetchLessons = async () => {
             const res = await fetch(`${api}/lessons`, {
                 method: 'GET',
@@ -26,7 +27,7 @@ const ReschedulePage = () => {
             if (Array.isArray(data)) setBookedLessons(data);
         };
         fetchLessons();
-    }, []);
+    }, [api]);
 
     const selectedDateStr = selectedDate.toISOString().split('T')[0];
 
