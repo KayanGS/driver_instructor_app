@@ -122,13 +122,13 @@ await sendEmail({
 ## Work Distribution
 | Task                                      | Assigned To |
 |-------------------------------------------|-------------|
-| **Improve Session Security**              | Kayan       |
-| **Rate Limiting, Controller Structure**   |             |
-| **Ownership protection, admin roles**     |             |
-| **Remove old UI, setup React Frontend**   |             |
-| **w/ routing, auth, and token purchase**  |             |
-|                                           |             |
-| **Integrate EmailJS for contact form**    | Ekaterina   |
-| **Integrate react-calendar in Booking**   |             |
-| **Implement Footer component**            |             |
-| **FAQ & Contact page, Book Lesson UI**    |             |
+| **Project Planning**                      | Ekaterina   |
+| **Database Design**                       | Kayan       |
+| **Backend Development**                   | Kayan       |
+| **Authentication and Authorization**      | Ekaterina   |
+| **Frontend Development**                  | Ekaterina   |
+| **Frontend Integration with Backend**     | Kayan       |
+| **CSS & Theming**                         | Both        |
+| **Deployment**                            | Both        |
+| **Testing**                               | Both        |
+| **Documentation**                         | Both        |
